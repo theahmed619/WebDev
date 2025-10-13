@@ -1,0 +1,53 @@
+.home{
+    padding: 20px 60px;
+}
+
+.homeLight{
+    background-color: whitesmoke;
+    color:black;
+}
+
+.homeDark{
+    background-color: black;
+    color:white
+}
+
+.bannerDiv{
+    width: 100%;
+    height: 450px;
+}
+
+.bannerImg{
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+}
+
+.products{
+    width: 100%;
+    padding:20px 0;
+}
+
+.productHorizontalList{
+    display: flex;
+    gap: 10px;
+    overflow: auto;
+    width: 100%;
+    overflow-y: hidden;
+     scrollbar-width: none
+}
+.recommendedBlock{
+    display: grid;
+    gap: 20px;
+    grid-template-columns: 1fr 1fr;
+}
+
+
+@media screen and (max-width: 780px) {
+  .home{
+    padding: 20px 10px;
+}
+.recommendedBlock{
+    grid-template-columns: 1fr;
+}
+}

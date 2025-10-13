@@ -1,0 +1,88 @@
+.card{
+    width: 250px;
+    flex-shrink: 0;
+    border-radius: 10px;
+}
+
+.cardLight {
+    border: 2px solid black;
+}
+
+.cardDark {
+    border: 2px solid yellow;
+}
+
+
+.imageBlock {
+    width: 100%;
+    height: 250px;
+    cursor: pointer;
+    transition: 0.5s linear;
+}
+
+.imageBlock:hover {
+    transform: scale(0.9);
+}
+
+.Image {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+}
+
+
+.DescBlockLight {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+}
+
+.DescBlockDark {
+    padding: 10px;
+    background-color: black;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    color: yellow;
+}
+
+.itemDesc {
+    font-size: 12px;
+    color: gray;
+    height: 25px;
+}
+
+.detail {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+
+}
+
+.price {
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.btnLight {
+    background-color: black;
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    border: 1px solid black;
+}
+
+.btnDark {
+    background-color: yellow;
+    color: black;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    border: 1px solid black;
+}

@@ -1,0 +1,82 @@
+[
+  {
+    "id": "a1f3b7",
+    "imageLink": "https://images.unsplash.com/photo-1637780852590-8ab27248ec41?q=80&w=765&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "productName": "Wireless Headphones",
+    "shortDesc": "Noise-cancelling over-ear headphones with long battery life",
+    "detailsDesc": "Enjoy immersive audio with advanced noise-cancellation technology. Comfortable over-ear design, 40-hour battery life, and Bluetooth 5.0 for stable connectivity.",
+    "price": 129.99
+  },
+  {
+    "id": "b4e1d9",
+    "imageLink": "https://plus.unsplash.com/premium_photo-1712761998611-c59db7dff27e?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8U21hcnQlMjBGaXRuZXNzJTIwV2F0Y2h8ZW58MHx8MHx8fDA%3D",
+    "productName": "Smart Fitness Watch",
+    "shortDesc": "Track your heart rate, steps, and sleep with ease",
+    "detailsDesc": "Waterproof fitness tracker with heart rate monitor, GPS tracking, sleep analysis, and 7-day battery. Syncs seamlessly with Android and iOS.",
+    "price": 89.99
+  },
+  {
+    "id": "c8f97a",
+    "imageLink": "https://images.unsplash.com/photo-1589256469067-ea99122bbdc4?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8UG9ydGFibGUlMjBCbHVldG9vdGglMjBTcGVha2VyfGVufDB8fDB8fHww",
+    "productName": "Portable Bluetooth Speaker",
+    "shortDesc": "Compact and powerful sound with deep bass",
+    "detailsDesc": "Wireless speaker with rich stereo sound, deep bass, and up to 12 hours of playtime. Features waterproof casing and built-in mic for calls.",
+    "price": 49.99
+  },
+  {
+    "id": "d7a4ce",
+    "imageLink": "https://images.unsplash.com/photo-1690176483702-7ee397871388?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8NEslMjBBY3Rpb24lMjBDYW1lcmF8ZW58MHx8MHx8fDA%3D",
+    "productName": "4K Action Camera",
+    "shortDesc": "Capture high-resolution videos and photos on the go",
+    "detailsDesc": "Rugged and waterproof action cam with 4K video recording, 16MP photo capture, image stabilization, and Wi-Fi connectivity. Comes with mounting accessories.",
+    "price": 159.99
+  },
+  {
+    "id": "e14b0d",
+    "imageLink": "https://images.unsplash.com/photo-1627745213598-51e38e5fc5f1?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8R2FtaW5nJTIwTW91c2UlMjBSR0J8ZW58MHx8MHx8fDA%3D",
+    "productName": "Gaming Mouse RGB",
+    "shortDesc": "Ergonomic mouse with customizable buttons and lighting",
+    "detailsDesc": "High-performance gaming mouse with 7 programmable buttons, 16.8M RGB color lighting, adjustable DPI up to 16,000, and ergonomic comfort design.",
+    "price": 39.99
+  },
+  {
+    "id": "fa1ce2",
+    "imageLink": "https://images.unsplash.com/photo-1618833081213-2e951978bc4f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8TWluaSUyMERyb25lJTIwd2l0aCUyMENhbWVyYXxlbnwwfHwwfHx8MA%3D%3D",
+    "productName": "Mini Drone with Camera",
+    "shortDesc": "Take aerial shots and videos with ease",
+    "detailsDesc": "Compact drone with 720p HD camera, one-key takeoff/landing, altitude hold, and headless mode. Perfect for beginners and kids.",
+    "price": 74.99
+  },
+  {
+    "id": "ab44f1",
+    "imageLink": "https://plus.unsplash.com/premium_photo-1743125670268-58297d418aba?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8Rm9sZGFibGUlMjBMYXB0b3AlMjBTdGFuZHxlbnwwfHwwfHx8MA%3D%3D",
+    "productName": "Foldable Laptop Stand",
+    "shortDesc": "Adjustable aluminum stand for better posture and airflow",
+    "detailsDesc": "Ergonomic stand compatible with laptops up to 17 inches. Foldable, lightweight design with anti-slip pads and cooling airflow support.",
+    "price": 29.99
+  },
+  {
+    "id": "bca387",
+    "imageLink": "https://images.unsplash.com/photo-1633381638729-27f730955c23?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8V2lyZWxlc3MlMjBDaGFyZ2VyJTIwUGFkfGVufDB8fDB8fHww",
+    "productName": "Wireless Charger Pad",
+    "shortDesc": "Fast charging pad for smartphones and earbuds",
+    "detailsDesc": "Slim, Qi-certified charger with 10W fast charging for compatible devices. Soft LED indicator, overheat protection, and case-friendly design.",
+    "price": 24.99
+  },
+  {
+    "id": "f9c301",
+    "imageLink": "https://plus.unsplash.com/premium_photo-1664474622093-78aa0e05d298?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8U3R5bGlzaCUyMEJhY2twYWNrfGVufDB8fDB8fHww",
+    "productName": "Stylish Backpack",
+    "shortDesc": "Water-resistant backpack with laptop compartment",
+    "detailsDesc": "Durable and stylish backpack with padded laptop sleeve, multiple compartments, anti-theft pocket, and water-resistant exterior. Ideal for work or travel.",
+    "price": 59.99
+  },
+  {
+    "id": "d222aa",
+    "imageLink": "https://plus.unsplash.com/premium_photo-1671707015944-16d9b6e5d747?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8RGVzayUyMExFRCUyMExhbXB8ZW58MHx8MHx8fDA%3D",
+    "productName": "Desk LED Lamp",
+    "shortDesc": "Touch control LED lamp with adjustable brightness",
+    "detailsDesc": "Minimalist LED desk lamp with 3 brightness levels, touch-sensitive controls, USB charging port, and foldable arm. Energy-efficient and eye-caring.",
+    "price": 19.99
+  }
+]
