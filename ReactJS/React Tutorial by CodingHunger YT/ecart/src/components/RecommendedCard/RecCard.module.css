@@ -1,0 +1,32 @@
+.RecommendedCard{
+    width: 100%;
+    border-radius: 10px;
+    cursor: pointer;
+    height: 350px;
+    position: relative;
+    transition: 0.5s linear;
+}
+.RecommendedCard:hover{
+    transform: scale(1.01);
+}
+
+.recommendedLight{
+    border: 2px solid black;
+}
+
+.darkRecommended{
+    border: 3px solid yellow;
+}
+
+.recomImage{
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+}
+
+.productName{
+    position: absolute;
+    bottom: 0;
+    left: 10px;
+    color: white;
+}

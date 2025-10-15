@@ -1,0 +1,34 @@
+[
+  {
+    "id":"kjh",
+    "imageLink": "https://plus.unsplash.com/premium_photo-1711134826547-169d7de16190?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8c2NyZWVufGVufDB8fDB8fHww",
+    "productName": "Large Screen Desktop",
+    "shortDesc": "Noise-cancelling over-ear headphones with long battery life",
+    "detailsDesc": "Enjoy immersive audio with advanced noise-cancellation technology. Comfortable over-ear design, 40-hour battery life, and Bluetooth 5.0 for stable connectivity.",
+    "price": 129.99
+  },
+  {
+    "id":"kcsjh",
+    "imageLink": "https://images.unsplash.com/photo-1710942130622-ac9b80331ae4?q=80&w=880&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "productName": "Large Size Sofa",
+    "shortDesc": "Track your heart rate, steps, and sleep with ease",
+    "detailsDesc": "Waterproof fitness tracker with heart rate monitor, GPS tracking, sleep analysis, and 7-day battery. Syncs seamlessly with Android and iOS.",
+    "price": 89.99
+  },
+  {
+    "id":"kjdxweh",
+    "imageLink": "https://plus.unsplash.com/premium_photo-1664474622093-78aa0e05d298?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8U3R5bGlzaCUyMEJhY2twYWNrfGVufDB8fDB8fHww",
+    "productName": "Stylish Backpack",
+    "shortDesc": "Water-resistant backpack with laptop compartment",
+    "detailsDesc": "Durable and stylish backpack with padded laptop sleeve, multiple compartments, anti-theft pocket, and water-resistant exterior. Ideal for work or travel.",
+    "price": 59.99
+  },
+  {
+    "id":"ksdcdcjh",
+    "imageLink": "https://plus.unsplash.com/premium_photo-1671707015944-16d9b6e5d747?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8RGVzayUyMExFRCUyMExhbXB8ZW58MHx8MHx8fDA%3D",
+    "productName": "Desk LED Lamp",
+    "shortDesc": "Touch control LED lamp with adjustable brightness",
+    "detailsDesc": "Minimalist LED desk lamp with 3 brightness levels, touch-sensitive controls, USB charging port, and foldable arm. Energy-efficient and eye-caring.",
+    "price": 19.99
+  }
+]

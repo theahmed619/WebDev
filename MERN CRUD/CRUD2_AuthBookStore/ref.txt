@@ -1,0 +1,4 @@
+A MERN Book Management App with JWT authentication.
+Users can register, log in, and perform CRUD operations on books and authors.
+Built by following the tutorial from @ansar009-x1p
+ on YouTube.

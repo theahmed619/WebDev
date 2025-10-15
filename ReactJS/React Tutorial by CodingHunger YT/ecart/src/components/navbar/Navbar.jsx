@@ -1,11 +1,14 @@
 import React, { useContext, useState } from "react";
 import styles from "./Navbar.module.css";
-import { ThemeContext } from "../../../ThemeContext";
+import { ThemeContext } from "../../context/ThemeContext"
 import { Link, useLocation } from "react-router-dom";
+import { useSelector } from 'react-redux';
 
 const Navbar = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const location = useLocation();
+
+   const cartItem = useSelector((state)=>state.cart.cartItems);
 
   const handleOnChange = () => {
     toggleTheme();
@@ -60,7 +63,7 @@ const Navbar = () => {
               theme === "light" ? styles.lightCartNumber : styles.darkCartNumber
             }
           >
-            0
+          {cartItem.length}
           </div>
         </Link>
         <label className={styles.switch}>
