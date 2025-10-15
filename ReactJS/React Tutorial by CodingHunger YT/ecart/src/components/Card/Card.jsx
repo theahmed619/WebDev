@@ -15,7 +15,7 @@ const Card = ({ theme, item }) => {
                 <p className={styles.itemDesc}>{item.shortDesc}</p>
                 <div className={styles.detail}>
                     <div className={styles.price}>$ {item.price}</div>
-                    <div className={theme === "light" ? styles.btnLight : styles.btnDark}  >Add To Cart</div>
+                    <div className={theme === "light" ? styles.btnLight : styles.btnDark}   >Add To Cart</div>
                 </div>
             </div>
         </div>
