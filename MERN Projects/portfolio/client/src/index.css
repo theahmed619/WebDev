@@ -1,0 +1,284 @@
+@import url('https://fonts.googleapis.com/css2?family=Gabarito&display=swap');
+
+@import "tailwindcss";
+
+* {
+  scroll-behavior: smooth;
+  font-family: 'Gabarito', sans-serif;
+}
+
+body{
+  background-image: url("assets//bg.png");
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.portfolio-card{
+  background-color: rgba(128,128,128,0.173);
+}
+
+.gradient-text {
+  background: linear-gradient(white, rgba(134, 78, 173));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.progress-bar::-webkit-progress-bar {
+  border-radius: 15px;
+  border: 1px solid gray;
+  background-color: transparent;
+}
+
+.progress-bar::-webkit-progress-value {
+  border-radius: 15px;
+  background: linear-gradient(to right, violet, yellow);
+}
+
+.scroll-bar::-webkit-scrollbar {
+  width: 5px;
+  background-color: transparent;
+}
+
+.scroll-bar::-webkit-scrollbar-thumb {
+  background-color: rgba(134, 78, 173);
+  border-radius: 20px;
+}
+
+.scroll-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Add these styles to index.css */
+
+.timeline-container {
+  position: relative;
+  padding-left: 3rem; /* Space for the line and dots */
+}
+
+/* The vertical "tree trunk" line */
+.timeline-container::before {
+  content: "";
+  position: absolute;
+  left: 1rem; /* Adjust this to center the line with the dots */
+  top: 15px; /* Start slightly below the top */
+  bottom: 15px; /* End slightly above the bottom */
+  width: 3px;
+  background: linear-gradient(white, rgba(134, 78, 173));
+  border-radius: 3px;
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 2.5rem; /* Space between experience cards */
+}
+
+/* The "dot" on the branch */
+.timeline-item::before {
+  content: "";
+  position: absolute;
+  left: -2.5rem; /* (3rem padding - 0.5rem dot width) */
+  top: 0.8rem; /* Aligns with the top of the card/text */
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  background-color: white;
+  border: 4px solid rgba(134, 78, 173);
+  z-index: 1;
+}
+
+.timeline-content {
+  position: relative;
+}
+
+/* --- Navbar Styles --- */
+
+.navbar-container {
+  position: fixed;
+  top: 2rem; /* 32px from top */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+
+  /* Styling from the image */
+  background-color: rgba(28, 28, 28, 0.75);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 9999px; /* Pill shape */
+  padding: 0.5rem; /* 8px */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.navbar-links {
+  display: flex;
+  gap: 0.5rem; /* 8px */
+}
+
+.nav-link {
+  padding: 0.75rem 1.5rem; /* 12px 24px */
+  color: #a0a0a0; /* Inactive text color */
+  text-decoration: none;
+  border-radius: 9999px; /* Pill shape */
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #ffffff; /* White text on hover */
+}
+
+.nav-link.active-link {
+  background-color: #3a3a3a; /* Dark gray for active */
+  color: #ffffff;
+}
+/* --- Navbar Mobile Styles --- */
+
+/* --- Mobile Menu Button --- */
+.mobile-menu-button {
+  display: none; /* Hidden on desktop */
+  color: white;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem; /* 4px */
+}
+
+/* --- Mobile Menu Container --- */
+.mobile-menu {
+  display: none; /* Hidden by default */
+  position: absolute;
+  top: calc(100% + 0.75rem); /* Position below the pill (12px) */
+  left: 0;
+  right: 0;
+  width: 90vw; /* Make it almost full width */
+  margin: 0 auto; /* Center it */
+
+  /* Styling */
+  background-color: rgba(28, 28, 28, 0.9); /* More opaque */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1.5rem; /* 24px */
+  padding: 1rem;
+  
+  /* Layout */
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.mobile-nav-link {
+  color: #a0a0a0;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.75rem 1.25rem;
+  border-radius: 9999px;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.mobile-nav-link:hover {
+  color: white;
+  background-color: #3a3a3a;
+}
+
+/* --- Media Query for Mobile --- */
+/* --- Mobile Menu Overlay --- */
+/* This is the full-screen semi-transparent background */
+.mobile-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  
+  /* Black background with transparency */
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  
+  /* Center the content */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+/* --- Mobile Menu Content Box --- */
+/* This is the modal window in the middle */
+.mobile-menu-content {
+  width: 90vw;
+  max-width: 400px; /* Max width for larger phones */
+  
+  /* Styling from the image */
+  background-color: #1c1c1c; /* Dark gray */
+  border-radius: 1.5rem; /* 24px */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1.5rem; /* 24px */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* --- Modal Header ("Navigation" + X button) --- */
+.mobile-menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 1rem; /* 16px */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* --- Modal Links --- */
+.mobile-menu-links {
+  display: flex;
+  flex-direction: column;
+  padding-top: 1rem; /* 16px */
+}
+
+.mobile-modal-link {
+  color: #a0a0a0;
+  text-decoration: none;
+  font-size: 1.125rem; /* 18px */
+  font-weight: 500;
+  padding: 1rem 0; /* 16px top/bottom */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: color 0.2s ease;
+}
+
+.mobile-modal-link:hover {
+  color: white;
+}
+
+/* Remove border from the last link */
+.mobile-menu-links a:last-child {
+  border-bottom: none;
+}
+
+
+/* --- Media Query for Mobile --- */
+/* This breakpoint (1024px) matches the 'lg:' prefix */
+@media (max-width: 1024px) {
+  
+  .navbar-container {
+    /* On mobile, center the pill and let it shrink */
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+  }
+
+  .navbar-links {
+    display: none; /* Hide desktop links */
+  }
+
+  /* This style is for the hamburger button INSIDE the pill */
+  .mobile-menu-button {
+    display: block; /* Show hamburger button */
+    color: white;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem;
+  }
+}
