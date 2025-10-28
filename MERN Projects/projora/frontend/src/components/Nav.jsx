@@ -13,10 +13,10 @@ import axios from "axios";
 import { authDataContext } from "../context/authContext";
 import { Link } from "react-router-dom";
 function Nav() {
-  let { getCurrentUser, userData } = useContext(userDataContext);
+  let { getCurrentUser, userData, setUserData } = useContext(userDataContext);
   let { serverUrl } = useContext(authDataContext);
-let [showSearch, setShowSearch] = useState(false)
-let [search, setSearch] = useState("")
+  let [showSearch, setShowSearch] = useState(false);
+  let [search, setSearch] = useState("");
   let [showProfile, setShowProfile] = useState(false);
   let navigate = useNavigate();
 
@@ -25,8 +25,8 @@ let [search, setSearch] = useState("")
       const result = await axios.get(serverUrl + "/api/auth/logout", {
         withCredentials: true,
       });
-      console.log(result.data.user);
-
+      // console.log(result.data.user);
+      setUserData(null);  
       navigate("/login");
     } catch (error) {
       console.log(error);
@@ -34,7 +34,10 @@ let [search, setSearch] = useState("")
   };
   return (
     <div className="w-[100vw] h-[70px] bg-[#ecfafaec] z-10 fixed top-0 flex  items-center justify-between px-[30px] shadow-md shadow-black ">
-      <Link to={'/'} className="w-[20%] lg:w-[30%] flex items-center justify-start   gap-[10px] cursor-pointer">
+      <Link
+        to={"/"}
+        className="w-[20%] lg:w-[30%] flex items-center justify-start   gap-[10px] cursor-pointer"
+      >
         <img src={logo} alt="" className="w-[30px]" />
         <h1 className="text-[25px] text-[black] font-sans ">OneCart</h1>
       </Link>
@@ -100,9 +103,7 @@ let [search, setSearch] = useState("")
           className="w-[30px] h-[30px] text-[#000000]  cursor-pointer hidden md:block"
           onClick={() => navigate("/cart")}
         />
-        <p className="absolute w-[18px] h-[18px] items-center  justify-center bg-black px-[5px] py-[2px] text-white  rounded-full text-[9px] top-[10px] right-[23px] hidden md:block">
-       
-        </p>
+        <p className="absolute w-[18px] h-[18px] items-center  justify-center bg-black px-[5px] py-[2px] text-white  rounded-full text-[9px] top-[10px] right-[23px] hidden md:block"></p>
       </div>
       {showSearch && (
         <div className="w-[100%]  h-[80px] bg-[#d8f6f9dd] absolute top-[100%] left-0 right-0 flex items-center justify-center ">

@@ -29,6 +29,7 @@ function Registration() {
          },{withCredentials:true})
 
          console.log(result.data)
+         navigate("/login")
 
     } catch (error) {
       console.log(error.data)

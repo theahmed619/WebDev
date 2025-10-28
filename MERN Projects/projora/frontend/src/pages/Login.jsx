@@ -52,7 +52,7 @@ function Login() {
         { name, email },
         { withCredentials: true }
       );
-
+getCurrentUser();
       navigate("/");
     } catch (error) {
       console.log(error);
