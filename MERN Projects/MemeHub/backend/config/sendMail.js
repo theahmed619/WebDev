@@ -77,7 +77,7 @@ const sendMail = async (email, subject, otp) => {
     // You must verify a domain in Resend to send from it.
     // For testing, you can send from their default test email.
     const { data, error } = await resend.emails.send({
-      from: 'FantasyHub <onboarding@resend.dev>', // Resend's default test email
+      from: 'MemeHub <onboarding@resend.dev>', // Resend's default test email
       to: [email],
       subject: subject,
       html: `
@@ -99,7 +99,7 @@ const sendMail = async (email, subject, otp) => {
         <body>
           <div class="container">
             <div class="header">
-              <h1>FantasyHub Verification</h1>
+              <h1>MemeHub Verification</h1>
             </div>
             <div class="content">
               <p>Hello ${email},</p>
@@ -108,7 +108,7 @@ const sendMail = async (email, subject, otp) => {
               <p>This code will expire in 5 minutes. If you did not request this, please ignore this email.</p>
             </div>
             <div class="footer">
-              <p>© 2025 FantasyHub. All rights reserved.</p>
+              <p>© 2025 MemeHub. All rights reserved.</p>
             </div>
           </div>
         </body>
