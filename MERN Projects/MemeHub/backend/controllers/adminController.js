@@ -12,7 +12,7 @@ export const adminLogin = async (req, res) => {
         expiresIn: "5m",
       });
 
-      await sendMail(email, "FantasyHub", otp);
+      await sendMail(email, "MemeHub", otp);
 
       res.json({
         message: "Otp send to your mail",
