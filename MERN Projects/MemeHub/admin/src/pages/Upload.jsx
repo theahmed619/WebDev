@@ -8,11 +8,13 @@ import { Upload as UploadIcon, Sparkles, X, Check, Loader } from 'lucide-react';
 
 const categories = [
   'Funny',
+  'Friends',
   'Adult',
   'Vlog',
   'News',
   'Emotional',
   'Animal',
+  'Nature',
   'Bollywood',
   'Hollywood',
   'Educational',
