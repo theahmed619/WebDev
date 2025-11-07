@@ -111,12 +111,12 @@ const Search = () => {
           )}
         </div>
         
-
+  <SnapCard/>
       </div>
-          <SnapCard/>
-           
+        
+            <Footer/>
     </div>
-     <Footer/>
+    
 
 
    
