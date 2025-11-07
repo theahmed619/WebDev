@@ -114,8 +114,9 @@ const Search = () => {
 
       </div>
           <SnapCard/>
-            <Footer/>
+           
     </div>
+     <Footer/>
 
 
    

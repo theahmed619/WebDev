@@ -10,7 +10,7 @@ const snapContent = {
   
   // --- Example for an image ---
    type: 'image',
-  url: "https://images.thedirect.com/media/article_full/despicable-movie.jpg"
+  url: "https://res.cloudinary.com/dg5vfvrad/image/upload/v1762437761/IMG-20250724-WA0018_tez27k.jpg"
 };
 // ----------------------------------------
 
