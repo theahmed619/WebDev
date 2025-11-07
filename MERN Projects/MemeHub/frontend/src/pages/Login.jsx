@@ -8,7 +8,7 @@ import { useState } from 'react';
 
 import { signInWithPopup } from 'firebase/auth';
 import { auth, provider } from '../../utils/Firebase'; // Assumed path
-import {LoadingBig }from '../components/Loading';
+import { LoadingSpinner } from '../components/Loading';
 import { toast } from "react-toastify";
 
 // --- FIX ---
@@ -88,7 +88,7 @@ function Login() {
                     className='w-[100%] h-[50px] bg-[#6060f5] rounded-lg flex items-center justify-center mt-[20px] text-[17px] font-semibold'
                     disabled={btnLoading}
                   >
-                    {btnLoading ? <LoadingBig/> : "Login"}
+                   {btnLoading ? <LoadingSpinner/> : "Login"}
                   </button>
 
                   <p className='flex  gap-[10px]'>You haven't any account? <span className='text-[#5555f6cf] text-[17px] font-semibold cursor-pointer' onClick={()=>navigate("/signup")}>Create New Account</span></p>
