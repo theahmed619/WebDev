@@ -64,7 +64,7 @@ const Search = () => {
 <>
       // Add padding for top/bottom navbars
     <div className="pt-6 pb-15 md:pt-24 md:pb-0 min-h-screen bg-gray-50 mt-3">
-      <div className="max-w-7xl mx-auto p-4 h-[8%]">
+      <div className="max-w-7xl mx-auto p-4 ">
         
         {/* Search Input Section (from your v1 code) */}
         <div className="mb-8">
