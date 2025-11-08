@@ -2,6 +2,8 @@ import { createContext, useContext, useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 import { server } from "../main";
+import { signInWithPopup } from "firebase/auth"; // <-- ADD firebase imports
+import { auth, provider } from "../firebase";
 
 const UserContext = createContext();
 
@@ -50,6 +52,38 @@ export const UserProvider = ({ children }) => {
       setBtnLoading(false);
     }
   }
+
+  async function loginWithGoogle(navigate, fetchChats) {
+    setBtnLoading(true);
+    try {
+      // 1. Trigger Firebase Google Popup
+      const result = await signInWithPopup(auth, provider);
+
+      // 2. Get user info FROM THE CLIENT-SIDE
+      const email = result.user.email;
+      const name = result.user.displayName;
+
+      // 3. Send this (unverified) data to your backend
+      const { data } = await axios.post(`${server}/api/user/auth-google`, {
+        email,
+        name,
+      });
+
+      // 4. Save your app's token (from your backend)
+      toast.success(data.message);
+      localStorage.clear();
+      localStorage.setItem("token", data.token);
+      navigate("/");
+      setBtnLoading(false);
+      setIsAuth(true);
+      setUser(data.user);
+      fetchChats(); // Fetch chats after login
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Login failed");
+      setBtnLoading(false);
+    }
+  }
+
   const [loading, setLoading] = useState(true);
 
   async function fetchUser() {
@@ -93,6 +127,7 @@ export const UserProvider = ({ children }) => {
         verifyUser,
         loading,
         logoutHandler,
+        loginWithGoogle,
       }}
     >
       {children}

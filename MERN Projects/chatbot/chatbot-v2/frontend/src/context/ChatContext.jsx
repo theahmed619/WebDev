@@ -11,39 +11,47 @@ export const ChatProvider = ({ children }) => {
   const [newRequestLoading, setNewRequestLoading] = useState(false);
 
   async function fetchResponse() {
+    if (prompt === "") {
+      // You're using react-hot-toast, so let's use it!
+      toast.error("Please enter a prompt");
+      return;
+    }
 
-    if (prompt === "") return alert("Write prompt");
+    // --- FIX ---
+    // 1. Store the current prompt in a local variable
+    const currentPrompt = prompt;
+    // --- END FIX ---
+
     setNewRequestLoading(true);
-    setPrompt("");
-   
+    setPrompt(""); // 2. Now it's safe to clear the input field state
 
     try {
       const response = await axios({
-     url: `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash-latest:generateContent?key=${import.meta.env.VITE_GEMINI_API_KEY}`,
- 
-
+   url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${import.meta.env.VITE_GEMINI_API_KEY}`,
 
         method: "post",
         data: {
-          contents: [{ parts: [{ text: prompt }] }],
+          // 3. Use the local variable
+          contents: [{ parts: [{ text: currentPrompt }] }],
         },
       });
 
+      const answer =
+        response["data"]["candidates"][0]["content"]["parts"][0]["text"];
+
       const message = {
-        question: prompt,
-        answer:
-          response["data"]["candidates"][0]["content"]["parts"][0]["text"],
+        question: currentPrompt, // 4. Use the local variable
+        answer: answer,
       };
 
       setMessages((prev) => [...prev, message]);
-      setNewRequestLoading(false);
+      setNewRequestLoading(false); // 5. Save the correct data to your backend
 
       const { data } = await axios.post(
         `${server}/api/chat/${selected}`,
         {
-          question: prompt,
-          answer:
-            response["data"]["candidates"][0]["content"]["parts"][0]["text"],
+          question: currentPrompt,
+          answer: answer,
         },
         {
           headers: {
@@ -52,11 +60,58 @@ export const ChatProvider = ({ children }) => {
         }
       );
     } catch (error) {
-      alert("someting went wrong");
-      console.log(error);
+      console.log(error.response?.data);
+      // Use toast here too!
+      toast.error("Something went wrong with the AI response.");
       setNewRequestLoading(false);
     }
   }
+
+  // async function fetchResponse() {
+
+  //   if (prompt === "") return alert("Write prompt");
+  //   setNewRequestLoading(true);
+  //   setPrompt("");
+
+  //   try {
+  //     const response = await axios({
+  // url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${import.meta.env.VITE_GEMINI_API_KEY}`,
+
+  //       method: "post",
+  //       data: {
+  //         contents: [{ parts: [{ text: prompt }] }],
+  //       },
+  //     });
+
+  //     const message = {
+  //       question: prompt,
+  //       answer:
+  //         response["data"]["candidates"][0]["content"]["parts"][0]["text"],
+  //     };
+
+  //     setMessages((prev) => [...prev, message]);
+  //     setNewRequestLoading(false);
+
+  //     const { data } = await axios.post(
+  //       `${server}/api/chat/${selected}`,
+  //       {
+  //         question: prompt,
+  //         answer:
+  //           response["data"]["candidates"][0]["content"]["parts"][0]["text"],
+  //       },
+  //       {
+  //         headers: {
+  //           token: localStorage.getItem("token"),
+  //         },
+  //       }
+  //     );
+  //   } catch (error) {
+  //      console.log(error.response?.data);
+  //     alert("someting went wrong");
+
+  //     setNewRequestLoading(false);
+  //   }
+  // }
 
   const [chats, setChats] = useState([]);
 
@@ -136,7 +191,6 @@ export const ChatProvider = ({ children }) => {
   }
 
   useEffect(() => {
-   
     fetchChats();
   }, []);
 

@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  googleAuth,
   loginUser,
   myProfile,
   verifyUser,
@@ -10,6 +11,9 @@ const router = express.Router();
 
 router.post("/login", loginUser);
 router.post("/verify", verifyUser);
+
+router.post("/auth-google", googleAuth);
+
 router.get("/me", isAuth, myProfile);
 
 export default router;
