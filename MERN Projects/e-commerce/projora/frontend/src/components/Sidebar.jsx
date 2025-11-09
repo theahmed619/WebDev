@@ -2,28 +2,27 @@ import React, { useState, useEffect } from 'react';
 import { HiChevronLeft, HiChevronRight } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';
 
-// 1. Updated slides array with CTA (Call to Action)
 const slides = [
   {
     image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=2070&auto=format&fit=crop',
     title: 'Welcome to Projora',
-    subtitle: 'Your one-stop store for high-quality MERN projects.',
+    subtitle: 'Your one-stop store for high-quality projects.',
     cta: 'Browse Projects',
     link: '/projects',
   },
   {
-    image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726c?q=80&w=2070&auto=format&fit=crop',
-    title: 'Featured: MemeHub',
+    image: 'https://www.ntaskmanager.com/wp-content/uploads/2020/02/What-is-a-Project-1-scaled.jpg',
+    title: 'All Tech Projects are Available',
     subtitle: 'A full-stack social media app ready to deploy.',
     cta: 'View Details',
-    link: '/project/60d5f1b4e6b3c1001f8f8b8a', // Example ID
+    link: '/projects',
   },
   {
-    image: 'https://images.unsplash.com/photo-1516116216624-53e6973bea12?q=80&w=1932&auto=format&fit=crop',
-    title: 'FantasyHub v3',
+    image: 'https://media.istockphoto.com/id/1452771551/vector/contact-us-button-with-cursor-pointer-click-vector-web-button.jpg?s=612x612&w=0&k=20&c=IGWQ-VhsNAnZyKnuWhggHhpozUiuFRq5jd-rJ7-KqIc=',
+    title: 'Contact for Customize Project',
     subtitle: 'Explore the latest update with new dynamic auth.',
-    cta: 'Learn More',
-    link: '/project/60d5f1b4e6b3c1001f8f8b8b', // Example ID
+    cta: 'Contact Us',
+    link: '/contact-us',
   },
 ];
 
@@ -44,7 +43,7 @@ const Slidebar = () => {
     return () => clearInterval(slideInterval);
   }, []);
 
-  // This is the max-width container you asked for
+  // This is the max-width container that centers your component
   return (
     <div className="relative w-full max-w-7xl mx-auto overflow-hidden rounded-2xl shadow-lg my-4">
       {/* Slide Container */}
@@ -53,27 +52,27 @@ const Slidebar = () => {
         style={{ transform: `translateX(-${currentSlide * 100}%)` }}
       >
         {slides.map((slide, index) => (
-          <div key={index} className="flex-shrink-0 w-full h-[300px] md:h-[450px] lg:h-[500px] relative">
+          // --- 1. REDUCED HEIGHT ---
+          <div key={index} className="flex-shrink-0 w-full h-[250px] md:h-[350px] lg:h-[400px] relative">
             <img 
               src={slide.image} 
               alt={slide.title} 
               className="w-full h-full object-cover"
-              onError={(e) => e.target.src = 'https://placehold.co/1200x500/0d1117/3b82f6?text=Image+Error'}
+              onError={(e) => e.target.src = 'https://placehold.co/1200x400/0d1117/3b82f6?text=Image+Error'}
             />
-            {/* 2. New Gradient Overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
             
-            {/* 3. New Text & CTA Position */}
-            <div className="absolute bottom-0 left-0 p-6 md:p-10 lg:p-12 text-left">
-              <h2 className="text-3xl md:text-5xl font-bold text-white shadow-lg">
+            {/* --- 2. ADJUSTED TEXT AND PADDING --- */}
+            <div className="absolute bottom-0 left-0 p-6 md:p-8 text-left">
+              <h2 className="text-2xl md:text-4xl font-bold text-white shadow-lg">
                 {slide.title}
               </h2>
-              <p className="text-lg md:text-xl text-white/90 mt-2 shadow-lg max-w-lg">
+              <p className="text-md md:text-lg text-white/90 mt-2 shadow-lg max-w-lg">
                 {slide.subtitle}
               </p>
               <button
                 onClick={() => navigate(slide.link)}
-                className="mt-6 bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-blue-700 transition-all"
+                className="mt-4 bg-blue-600 text-white font-semibold py-2 px-5 rounded-lg shadow-md hover:bg-blue-700 transition-all"
               >
                 {slide.cta}
               </button>

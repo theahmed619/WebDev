@@ -15,6 +15,8 @@ import Projects from "./pages/Projects";
 import ProjectDetail from "./pages/ProjectDetail";
 import ProjectsByCategory from "./pages/ProjectsByCategory";
 import Search from "./pages/Search"; // This is correct
+import Legal from "./pages/Legal";
+import Contact from "./pages/Contact";
 
 const App = () => {
   const { isAuth, loading } = UserData();
@@ -66,6 +68,15 @@ const App = () => {
         <Route
           path="/search"
           element={isAuth ? <Search /> : <Navigate to="/login" />}
+        />
+
+        <Route
+          path="/legal"
+          element={isAuth ? <Legal /> : <Navigate to="/login" />}
+        />
+         <Route
+          path="/contact-us"
+          element={isAuth ? <Contact /> : <Navigate to="/login" />}
         />
         
         {/* Fallback route */}

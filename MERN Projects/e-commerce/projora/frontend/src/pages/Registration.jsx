@@ -2,17 +2,10 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoEyeOutline, IoEye } from "react-icons/io5";
 import { signInWithPopup } from "firebase/auth";
-import { auth, provider } from "../../utils/Firebase"; // Adjust this path if needed
+import { auth, provider } from "../../utils/Firebase";
 import { toast } from "react-hot-toast";
-
-// 1. Import the custom hook 'UserData'
 import { UserData } from "../context/UserContext";
-
-// 2. Import a loading component
-// import { LoadingSmall } from "../components/Loading";
-
-// Assuming a default logo path
-import Logo from "/lust.png";
+import Logo from "/shopping-bag.png";
 import google from "../assets/google.png";
 
 function Registration() {
@@ -22,32 +15,22 @@ function Registration() {
   let [password, setPassword] = useState("");
 
   let navigate = useNavigate();
-
-  // 3. Use the UserData hook
   const { registerWithEmail, loginWithGoogle, btnLoading } = UserData();
 
-  // 4. Handle Email/Password Registration
   const handleSignup = async (e) => {
     e.preventDefault();
     await registerWithEmail(name, email, password, navigate);
   };
 
-  // 5. Handle Google Signup
   const googleSignup = async () => {
     try {
       const response = await signInWithPopup(auth, provider);
-      
-      // --- CRITICAL FIX ---
-      // Create the user object WITH googleId
       const googleUser = {
         name: response.user.displayName,
         email: response.user.email,
-        googleId: response.user.uid, // <-- Required by your backend
+        googleId: response.user.uid,
       };
-
-      // Google sign-up and login use the same backend route
       await loginWithGoogle(googleUser, navigate);
-
     } catch (error) {
       console.log(error);
       toast.error("Google Sign Up Failed");
@@ -55,99 +38,128 @@ function Registration() {
   };
 
   return (
-    <div className="w-[100vw] h-[100vh] bg-gradient-to-l from-[#141414] to-[#0c2025] text-[white] flex flex-col items-center justify-start">
-      <div
-        className="w-[100%] h-[80px] flex items-center justify-start px-[30px] gap-[10px] cursor-pointer"
-        onClick={() => navigate("/")}
-      >
-        <img className="w-[40px]" src={Logo} alt="Projora Logo" />
-        <h1 className="text-[22px] font-sans ">Projora</h1>
+    <div className="min-h-screen w-full bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-900 flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Animated background elements */}
+      <div className='absolute inset-0 overflow-hidden'>
+        <div className='absolute top-1/3 left-1/3 w-96 h-96 bg-indigo-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse'></div>
+        <div className='absolute bottom-1/3 right-1/3 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse delay-1000'></div>
       </div>
 
-      <div className="w-[100%] h-[100px] flex items-center justify-center flex-col gap-[10px]">
-        <span className="text-[25px] font-semibold">Create an Account</span>
-        <span className="text-[16px]">
-          Welcome to Projora, get your projects
-        </span>
+      {/* Logo Header */}
+      <div className='absolute top-8 left-8 flex items-center gap-3 cursor-pointer z-10 group' onClick={() => navigate("/")}>
+        <div className='w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform'>
+          <img className='w-7' src={Logo} alt="Projora Logo" />
+        </div>
+        <h1 className='text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent'>Projora</h1>
       </div>
-      <div className="max-w-[600px] w-[90%] min-h-[500px] bg-[#00000025] border-[1px] border-[#96969635] backdrop:blur-2xl rounded-lg shadow-lg flex items-center justify-center py-8">
-        <form
-          action=""
-          onSubmit={handleSignup}
-          className="w-[90%] h-[90%] flex flex-col items-center justify-start gap-[20px]"
-        >
-          <button
-            type="button"
-            className="w-[90%] h-[50px] bg-[#42656cae] rounded-lg flex items-center justify-center gap-[10px] py-[20px] cursor-pointer"
-            onClick={googleSignup}
-            disabled={btnLoading}
-          >
-            <img src={google} alt="" className="w-[20px]" /> Sign up with Google
-          </button>
 
-          <div className="w-[100%] h-[20px] flex items-center justify-center gap-[10px]">
-            <div className="w-[40%] h-[1px] bg-[#96969635]"></div> OR{" "}
-            <div className="w-[40%] h-[1px] bg-[#96969635]"></div>
+      {/* Main Card */}
+      <div className='w-full max-w-md relative z-10'>
+        <div className='bg-white/10 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 p-8 space-y-6'>
+          {/* Header */}
+          <div className='text-center space-y-2'>
+            <h2 className='text-3xl font-bold text-white'>Create Account</h2>
+            <p className='text-gray-300 text-sm'>Join Projora and get started today</p>
           </div>
-          
-          <div className="w-[90%] flex flex-col items-center justify-center gap-[15px] relative">
-            <input
-              type="text"
-              className="w-[100%] h-[50px] border-[2px] border-[#96969635] backdrop:blur-sm rounded-lg shadow-lg bg-transparent placeholder-[#ffffffc7] px-[20px] font-semibold"
-              placeholder="Full Name"
-              required
-              onChange={(e) => setName(e.target.value)}
-              value={name}
-            />
-            <input
-              type="email"
-              className="w-[100%] h-[50px] border-[2px] border-[#96969635] backdrop:blur-sm rounded-lg shadow-lg bg-transparent placeholder-[#ffffffc7] px-[20px] font-semibold"
-              placeholder="Email"
-              required
-              onChange={(e) => setEmail(e.target.value)}
-              value={email}
-            />
-            <div className="w-full h-[50px] relative">
-              <input
-                type={show ? "text" : "password"}
-                className="w-[100%] h-full border-[2px] border-[#96969635] backdrop:blur-sm rounded-lg shadow-lg bg-transparent placeholder-[#ffffffc7] px-[20px] font-semibold"
-                placeholder="Password (min 8 characters)"
-                required
-                onChange={(e) => setPassword(e.target.value)}
-                value={password}
-              />
-              {!show && (
-                <IoEyeOutline
-                  className="w-[20px] h-[20px] cursor-pointer absolute right-4 top-1/2 -translate-y-1/2"
-                  onClick={() => setShow((prev) => !prev)}
-                />
-              )}
-              {show && (
-                <IoEye
-                  className="w-[20px] h-[20px] cursor-pointer absolute right-4 top-1/2 -translate-y-1/2"
-                  onClick={() => setShow((prev) => !prev)}
-                />
-              )}
-            </div>
-            
+
+          <form onSubmit={handleSignup} className='space-y-5'>
+            {/* Google Sign Up Button */}
             <button
-              type="submit"
-              className="w-[100%] h-[50px] bg-[#6060f5] rounded-lg flex items-center justify-center mt-[20px] text-[17px] font-semibold disabled:opacity-70 disabled:cursor-not-allowed"
+              type="button"
+              className='w-full h-12 bg-white hover:bg-gray-50 rounded-xl flex items-center justify-center gap-3 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed group'
+              onClick={googleSignup}
               disabled={btnLoading}
             >
-              {btnLoading ? "Creating..." /* <LoadingSmall /> */ : "Create Account"}
+              <img src={google} alt="" className='w-5 h-5 group-hover:scale-110 transition-transform'/>
+              <span className='text-gray-800 font-semibold'>Continue with Google</span>
             </button>
-            <p className="flex gap-[10px] mt-4">
-              Have an account?{" "}
+
+            {/* Divider */}
+            <div className='flex items-center gap-4 py-2'>
+              <div className='flex-1 h-px bg-gradient-to-r from-transparent via-gray-400 to-transparent'></div>
+              <span className='text-gray-400 text-sm font-medium'>OR</span>
+              <div className='flex-1 h-px bg-gradient-to-r from-transparent via-gray-400 to-transparent'></div>
+            </div>
+
+            {/* Name Input */}
+            <div className='space-y-2'>
+              <label className='text-sm font-medium text-gray-200 ml-1'>Full Name</label>
+              <input
+                type="text"
+                className='w-full h-12 bg-white/5 border-2 border-white/10 rounded-xl px-4 text-white placeholder-gray-400 focus:border-indigo-500 focus:bg-white/10 transition-all duration-300 outline-none'
+                placeholder='Enter your full name'
+                required
+                onChange={(e) => setName(e.target.value)}
+                value={name}
+              />
+            </div>
+
+            {/* Email Input */}
+            <div className='space-y-2'>
+              <label className='text-sm font-medium text-gray-200 ml-1'>Email Address</label>
+              <input
+                type="email"
+                className='w-full h-12 bg-white/5 border-2 border-white/10 rounded-xl px-4 text-white placeholder-gray-400 focus:border-indigo-500 focus:bg-white/10 transition-all duration-300 outline-none'
+                placeholder='Enter your email'
+                required
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
+              />
+            </div>
+
+            {/* Password Input */}
+            <div className='space-y-2'>
+              <label className='text-sm font-medium text-gray-200 ml-1'>Password</label>
+              <div className="relative">
+                <input
+                  type={show ? "text" : "password"}
+                  className='w-full h-12 bg-white/5 border-2 border-white/10 rounded-xl px-4 pr-12 text-white placeholder-gray-400 focus:border-indigo-500 focus:bg-white/10 transition-all duration-300 outline-none'
+                  placeholder='Min. 8 characters'
+                  required
+                  onChange={(e) => setPassword(e.target.value)}
+                  value={password}
+                />
+                <button
+                  type="button"
+                  className='absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors'
+                  onClick={() => setShow((prev) => !prev)}
+                >
+                  {show ? <IoEye className='w-5 h-5'/> : <IoEyeOutline className='w-5 h-5'/>}
+                </button>
+              </div>
+            </div>
+
+            {/* Sign Up Button */}
+            <button
+              type="submit"
+              className='w-full h-12 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 rounded-xl text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed mt-6'
+              disabled={btnLoading}
+            >
+              {btnLoading ? (
+                <div className='flex items-center justify-center gap-2'>
+                  <div className='w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin'></div>
+                  <span>Creating account...</span>
+                </div>
+              ) : "Create Account"}
+            </button>
+
+            {/* Login Link */}
+            <p className='text-center text-gray-300 text-sm pt-4'>
+              Already have an account?{" "}
               <span
-                className="text-[#5555f6cf] text-[17px] font-semibold cursor-pointer"
+                className='text-indigo-400 font-semibold cursor-pointer hover:text-indigo-300 transition-colors'
                 onClick={() => navigate("/login")}
               >
-                Login
+                Sign in
               </span>
             </p>
-          </div>
-        </form>
+          </form>
+        </div>
+
+        {/* Decorative bottom text */}
+        <p className='text-center text-gray-400 text-xs mt-6'>
+          By continuing, you agree to Projora's Terms of Service and Privacy Policy
+        </p>
       </div>
     </div>
   );

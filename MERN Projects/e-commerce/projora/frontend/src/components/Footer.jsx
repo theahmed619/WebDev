@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Facebook, Twitter, Instagram, Linkedin, Github } from "lucide-react";
+import { Facebook, Twitter, Instagram, Linkedin, Github,Mail } from "lucide-react";
 import Logo from "../../public/shopping-bag.png"; // Import your logo
 
 function Footer() {
@@ -26,7 +26,7 @@ function Footer() {
             <ul className="space-y-3">
               <li><Link to="/" className="hover:text-blue-400 transition-colors">Home</Link></li>
               <li><Link to="/projects" className="hover:text-blue-400 transition-colors">All Projects</Link></li>
-              <li><Link to="/profile" className="hover:text-blue-400 transition-colors">My Profile</Link></li>
+             
             </ul>
           </div>
 
@@ -34,19 +34,21 @@ function Footer() {
           <div className="md:col-span-1">
             <h3 className="text-lg font-semibold text-white mb-4">Legal</h3>
             <ul className="space-y-3">
-              <li><Link to="/privacy-policy" className="hover:text-blue-400 transition-colors">Privacy Policy</Link></li>
-              <li><Link to="/terms-of-service" className="hover:text-blue-400 transition-colors">Terms of Service</Link></li>
+              <li><Link to="/legal#privacy-policy" className="hover:text-blue-400 transition-colors">Privacy Policy</Link></li>
+              <li><Link to="/legal#terms-of-service" className="hover:text-blue-400 transition-colors">Terms of Service</Link></li>
             </ul>
           </div>
 
           {/* 4. Social Links */}
-          <div className="md:col-span-1">
-            <h3 className="text-lg font-semibold text-white mb-4">Follow Me</h3>
+          <div className="md:col-span-1" id="contact-us">
+            <h3 className="text-lg font-semibold text-white mb-4">Contact Us </h3>
             <div className="flex space-x-5">
-              <a href="#" className="hover:text-blue-400 transition-colors" title="GitHub"><Github size={24} /></a>
-              <a href="#" className="hover:text-blue-400 transition-colors" title="LinkedIn"><Linkedin size={24} /></a>
-              <a href="#" className="hover:text-blue-400 transition-colors" title="Twitter"><Twitter size={24} /></a>
-              <a href="#" className="hover:text-blue-400 transition-colors" title="Instagram"><Instagram size={24} /></a>
+           <a href="mailto:hello@devmynt.in" className="hover:text-blue-400 transition-colors" title="Email">
+                <Mail size={24} />
+              </a>
+              <a href="https://www.linkedin.com/company/devmynt/" className="hover:text-blue-400 transition-colors" title="LinkedIn"><Linkedin size={24} /></a>
+              <a href="https://x.com/DevMynt" className="hover:text-blue-400 transition-colors" title="Twitter"><Twitter size={24} /></a>
+              <a href="https://www.instagram.com/devmynt/" className="hover:text-blue-400 transition-colors" title="Instagram"><Instagram size={24} /></a>
             </div>
           </div>
 
