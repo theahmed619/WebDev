@@ -1,6 +1,6 @@
 import Project from '../models/Project.js';
 import cloudinary from '../config/cloudinaryConfig.js';
-import User from '../models/User.js'
+import User from '../models/User.js'; 
 
 // Helper function to delete media from Cloudinary
 const deleteCloudinaryMedia = async (public_id, resource_type = 'image') => {
@@ -285,7 +285,7 @@ export const getDownloadLink = async (req, res) => {
 
     // 3. If they own it, get the project and return the file URL
     const project = await Project.findById(projectId);
-    if (!project || !project.productFile || !project.productFile.url) {
+  if (!project || !project.productFile) {
       return res.status(404).json({ message: "Project file not found." });
     }
 
