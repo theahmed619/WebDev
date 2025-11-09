@@ -291,7 +291,7 @@ export const getDownloadLink = async (req, res) => {
 
     res.status(200).json({
       message: "Download link fetched.",
-      downloadUrl: project.productFile.url,
+      downloadUrl: project.productFile,
     });
 
   } catch (error) {
