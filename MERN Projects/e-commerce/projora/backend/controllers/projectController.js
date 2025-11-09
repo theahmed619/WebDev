@@ -143,8 +143,13 @@ export const deleteProject = async (req, res) => {
     // if (project.productFile && project.productFile.public_id) {
     //   await deleteCloudinaryMedia(project.productFile.public_id, 'raw'); // 'raw' is for files
     // }
+
+    await User.updateMany(
+      { purchasedProjects: id },
+      { $pull: { purchasedProjects: id } }
+    );
     
-    // 3. Delete the post from MongoDB
+    // Delete the post from MongoDB
     await Project.findByIdAndDelete(id);
 
     res.status(200).json({
