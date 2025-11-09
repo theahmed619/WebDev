@@ -1,5 +1,6 @@
 import Project from '../models/Project.js';
 import cloudinary from '../config/cloudinaryConfig.js';
+import User from '../models/User.js'
 
 // Helper function to delete media from Cloudinary
 const deleteCloudinaryMedia = async (public_id, resource_type = 'image') => {
