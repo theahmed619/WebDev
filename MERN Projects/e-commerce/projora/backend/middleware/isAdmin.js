@@ -4,7 +4,7 @@
 export const isAdmin = async (req, res, next) => {
   try {
     // req.user.email was populated by the isAuth middleware
-    const userEmail = req.user;
+    const userEmail = req.user.email;
 
     if (userEmail === process.env.ADMIN_EMAIL) {
       // User is authenticated AND is the admin
