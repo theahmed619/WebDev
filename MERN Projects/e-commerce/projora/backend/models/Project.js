@@ -5,7 +5,6 @@ const projectSchema = new mongoose.Schema(
     title: {
       type: String,
       required: true,
-      unique: true,
     },
     desc: {
       type: String,
@@ -14,6 +13,10 @@ const projectSchema = new mongoose.Schema(
     category: {
       type: String,
       required: true,
+    },
+    technologies: {
+      type: [String], // An array of strings
+      required: false, // Or true, if you want to force it
     },
     price: {
       type: Number,

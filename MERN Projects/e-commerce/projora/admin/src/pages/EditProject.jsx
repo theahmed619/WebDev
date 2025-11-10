@@ -20,6 +20,11 @@ const categories = [
   'Games',
   'Other',
 ];
+// --- 1. ADD TECHNOLOGY LIST ---
+const allTechnologies = [
+  'HTML', 'CSS', 'JavaScript', 'React', 'Node.js', 'Express', 'MongoDB', 
+  'Firebase', 'TailwindCSS', 'Java', 'Python', 'Redux'
+]
 
 const EditProject = () => {
   const { id } = useParams();
@@ -32,6 +37,7 @@ const EditProject = () => {
   const [price, setPrice] = useState('');
   const [liveDemoUrl, setLiveDemoUrl] = useState('');
   const [googleDriveLink, setGoogleDriveLink] = useState(''); 
+  const [technologies, setTechnologies] = useState([]);
 
   // --- 1. MODIFIED STATE FOR MULTIPLE IMAGES ---
   const [oldImages, setOldImages] = useState([]); // To show current images
@@ -70,6 +76,7 @@ const EditProject = () => {
         setPrice(project.price.toString());
         setLiveDemoUrl(project.liveDemoUrl);
         setGoogleDriveLink(project.productFile || '');
+        setTechnologies(project.technologies || []);
         
         // --- 2. MODIFIED TO LOAD IMAGE ARRAY ---
         if (project.images) {
@@ -131,6 +138,14 @@ const EditProject = () => {
   }
   // --- END MODIFICATION ---
 
+  const handleTechChange = (tech) => {
+    setTechnologies(prev => 
+      prev.includes(tech) 
+        ? prev.filter(t => t !== tech) // Uncheck: remove from array
+        : [...prev, tech] // Check: add to array
+    );
+  };
+
   // 3. Handle submit
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -144,6 +159,7 @@ const EditProject = () => {
       title, 
       desc, 
       category, 
+      technologies,
       price: Number(price), 
       liveDemoUrl, 
       productFile: googleDriveLink
@@ -296,6 +312,23 @@ const EditProject = () => {
                   className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
                   placeholder="https://drive.google.com/..."
                 />
+              </div>
+            </div>
+            <div className="mt-6 space-y-2">
+              <label className="block text-sm font-bold text-gray-700">Technologies</label>
+              <div className="flex flex-wrap gap-3">
+                {allTechnologies.map((tech) => (
+                  <label key={tech} className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={technologies.includes(tech)}
+                      onChange={() => handleTechChange(tech)}
+                      disabled={isLoading}
+                      className="h-5 w-5 rounded text-indigo-600 focus:ring-indigo-500"
+                    />
+                    <span className="font-medium text-gray-700">{tech}</span>
+                  </label>
+                ))}
               </div>
             </div>
           </div>

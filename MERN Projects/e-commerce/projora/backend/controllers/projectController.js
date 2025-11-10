@@ -22,7 +22,7 @@ export const createProject = async (req, res) => {
     const { title, desc, category, price, liveDemoUrl, images, demoVideo, productFile } = req.body;
 
     // --- 1. Validation ---
-    if (!title || !desc || !category || !price || !liveDemoUrl || !productFile) {
+    if (!title || !desc || !category || !price || !liveDemoUrl || !productFile,technologies) {
       return res.status(400).json({
         message: 'Title, desc, category, price, live demo, and product file are required.',
       });
@@ -36,6 +36,7 @@ export const createProject = async (req, res) => {
       title,
       desc,
       category,
+      technologies,
       price: Number(price),
       liveDemoUrl,
       images,
@@ -53,11 +54,7 @@ export const createProject = async (req, res) => {
 
   } catch (error) {
     console.log("PROJECT CREATE FAILED:", error);
-    if (error.code === 11000) {
-      return res.status(409).json({
-        message: `A project with the title '${error.keyValue.title}' already exists.`,
-      });
-    }
+  
     res.status(500).json({
       message: 'Server error while creating project.',
       error: error.message,
@@ -194,7 +191,7 @@ export const getProjectCategories = async (req, res) => {
 export const updateProject = async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, desc, category, price, liveDemoUrl, images, demoVideo, productFile } = req.body;
+    const { title, desc, category, price, liveDemoUrl, images, demoVideo, productFile,technologies } = req.body;
 
     const oldProject = await Project.findById(id);
     if (!oldProject) {
@@ -206,6 +203,7 @@ export const updateProject = async (req, res) => {
       title: title || oldProject.title,
       desc: desc || oldProject.desc,
       category: category || oldProject.category,
+      technologies: technologies || oldProject.technologies,
       price: Number(price) || oldProject.price,
       liveDemoUrl: liveDemoUrl || oldProject.liveDemoUrl,
       productFile: productFile || oldProject.productFile,
@@ -253,11 +251,7 @@ export const updateProject = async (req, res) => {
 
   } catch (error) {
     console.log('UPDATE PROJECT FAILED:', error);
-    if (error.code === 11000) {
-      return res.status(409).json({
-        message: `A project with the title '${error.keyValue.title}' already exists.`,
-      });
-    }
+  
     res.status(500).json({
       message: 'Server error while updating project post.',
       error: error.message,
@@ -305,5 +299,30 @@ export const getDownloadLink = async (req, res) => {
       message: 'Server error while fetching download link.',
       error: error.message,
     });
+  }
+};
+
+export const getProjectsByTech = async (req, res) => {
+  try {
+    // URL will look like: /api/projects/filter?techs=HTML,CSS,JS
+    const techQuery = req.query.techs; // "HTML,CSS,JS"
+    
+    // If no techs are selected, return all projects
+    if (!techQuery) {
+      return getAllProjects(req, res); // Just show all
+    }
+
+    const techArray = techQuery.split(','); // ["HTML", "CSS", "JS"]
+
+    // Find all projects where the 'technologies' array
+    // contains ALL of the items in techArray
+    const projects = await Project.find({
+      technologies: { $all: techArray }
+    });
+
+    res.status(200).json({ projects });
+
+  } catch (error) {
+    res.status(500).json({ message: "Server error while filtering." });
   }
 };

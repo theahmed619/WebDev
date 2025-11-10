@@ -17,6 +17,7 @@ import ProjectsByCategory from "./pages/ProjectsByCategory";
 import Search from "./pages/Search"; // This is correct
 import Legal from "./pages/Legal";
 import Contact from "./pages/Contact";
+import SelectTech from "./pages/SelectTech";
 
 const App = () => {
   const { isAuth, loading } = UserData();
@@ -77,6 +78,10 @@ const App = () => {
          <Route
           path="/contact-us"
           element={isAuth ? <Contact /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/select-tech"
+          element={isAuth ? <SelectTech /> : <Navigate to="/login" />}
         />
         
         {/* Fallback route */}

@@ -3,7 +3,10 @@ import { uploadToCloudinary } from '../helpers/uploadHelper';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import Navbar from "../components/Navbar"
+// --- 1. THIS IS THE FIX ---
+// You were missing the import for your icons
 import { HiOutlinePhotograph, HiOutlineVideoCamera } from 'react-icons/hi';
+// --- END OF FIX ---
 import { Upload as UploadIcon, Sparkles, X, Check, Loader, Link as LinkIcon, Plus } from 'lucide-react';
 
 const categories = [
@@ -19,6 +22,11 @@ const categories = [
   'Other',
 ];
 
+const allTechnologies = [
+  'HTML', 'CSS', 'JavaScript', 'React', 'Node.js', 'Express', 'MongoDB', 
+  'Firebase', 'TailwindCSS', 'Java', 'Python', 'Redux'
+];
+
 const Upload = () => {
   const [title, setTitle] = useState('');
   const [desc, setDesc] = useState('');
@@ -26,14 +34,12 @@ const Upload = () => {
   const [price, setPrice] = useState('');
   const [liveDemoUrl, setLiveDemoUrl] = useState('');
   const [googleDriveLink, setGoogleDriveLink] = useState('');
+  const [technologies, setTechnologies] = useState([]);
 
-  // --- 1. MODIFIED FOR MULTIPLE IMAGES ---
-  const [imageFiles, setImageFiles] = useState([]); // Changed to array
+  const [imageFiles, setImageFiles] = useState([]);
   const [videoFile, setVideoFile] = useState(null);
-
-  const [imagePreviews, setImagePreviews] = useState([]); // Changed to array
+  const [imagePreviews, setImagePreviews] = useState([]);
   const [videoPreview, setVideoPreview] = useState('');
-  // --- END MODIFICATION ---
 
   const [isLoading, setIsLoading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState('');
@@ -41,7 +47,6 @@ const Upload = () => {
   const imageInputRef = useRef(null);
   const videoInputRef = useRef(null);
 
-  // --- 2. MODIFIED handleFileChange ---
   const handleFileChange = (e, fileType) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
@@ -49,10 +54,8 @@ const Upload = () => {
     if (fileType === 'image') {
       const newFiles = Array.from(files);
       const newPreviews = newFiles.map(file => URL.createObjectURL(file));
-
       setImageFiles(prevFiles => [...prevFiles, ...newFiles]);
       setImagePreviews(prevPreviews => [...prevPreviews, ...newPreviews]);
-
     } else if (fileType === 'video') {
       const file = files[0];
       const previewUrl = URL.createObjectURL(file);
@@ -61,21 +64,17 @@ const Upload = () => {
     }
   };
 
-  // --- 3. MODIFIED clearFile ---
   const clearFile = (fileType, indexToRemove) => {
     if (fileType === 'image') {
-      // If index is provided, remove one image
       if (indexToRemove !== undefined) {
         setImageFiles(prev => prev.filter((_, i) => i !== indexToRemove));
         setImagePreviews(prev => {
           const newPreviews = prev.filter((_, i) => i !== indexToRemove);
-          // Revoke the object URL to prevent memory leaks
           URL.revokeObjectURL(prev[indexToRemove]);
           return newPreviews;
         });
       } else {
-        // Clear all images
-        imagePreviews.forEach(url => URL.revokeObjectURL(url)); // Revoke all
+        imagePreviews.forEach(url => URL.revokeObjectURL(url));
         setImageFiles([]);
         setImagePreviews([]);
         if (imageInputRef.current) imageInputRef.current.value = null;
@@ -87,7 +86,6 @@ const Upload = () => {
       if (videoInputRef.current) videoInputRef.current.value = null;
     }
   };
-  // --- END MODIFICATION ---
 
   const clearForm = () => {
     setTitle('');
@@ -96,8 +94,17 @@ const Upload = () => {
     setPrice('');
     setLiveDemoUrl('');
     setGoogleDriveLink('');
+    setTechnologies([]);
     clearFile('image');
     clearFile('video');
+  };
+
+  const handleTechChange = (tech) => {
+    setTechnologies(prev => 
+      prev.includes(tech) 
+        ? prev.filter(t => t !== tech)
+        : [...prev, tech]
+    );
   };
 
   const handleSubmit = async (e) => {
@@ -106,27 +113,21 @@ const Upload = () => {
     if (!title || !category || !price || !liveDemoUrl || !googleDriveLink) {
       return toast.error('All fields, including Google Drive link, are required.');
     }
-    // --- 4. MODIFIED VALIDATION ---
     if (imageFiles.length === 0) {
       return toast.error('You must upload at least one Cover Image.');
     }
-    // --- END MODIFICATION ---
-
+    
     setIsLoading(true);
     let demoVideo = null;
-    
-    // --- 5. MODIFIED IMAGE UPLOAD ---
     let uploadedImages = [];
     try {
       setUploadProgress(`Uploading ${imageFiles.length} image(s)...`);
       
-      // Use Promise.all to upload all images in parallel
       const uploadPromises = imageFiles.map(file => 
         uploadToCloudinary(file, 'image')
       );
       uploadedImages = await Promise.all(uploadPromises);
 
-      // Check if any image upload failed
       if (uploadedImages.some(img => img === null)) {
         toast.error("One or more image uploads failed. Cannot create project.");
         setIsLoading(false);
@@ -142,18 +143,17 @@ const Upload = () => {
       setUploadProgress('Creating project...');
       const token = localStorage.getItem('token');
 
-      // --- 6. MODIFIED DATA STRUCTURE ---
       const projectPostData = {
         title,
         desc,
         category,
+        technologies,
         price: Number(price),
         liveDemoUrl,
-        images: uploadedImages, // Send the array of uploaded images
+        images: uploadedImages,
         demoVideo: demoVideo, 
         productFile: googleDriveLink,
       };
-      // --- END MODIFIED DATA ---
 
       await axios.post(
         `${import.meta.env.VITE_SERVER}/api/projects/create`,
@@ -172,11 +172,8 @@ const Upload = () => {
       setUploadProgress('');
     }
   };
-  // --- END MODIFICATION ---
-
-  // (MediaUploadCard component is now only used for video)
+  
   const MediaUploadCard = ({ type, icon: Icon, label, file, preview, inputRef, gradient }) => (
-    // ... (This component is unchanged, but we'll use it differently)
     <div className="group">
       <button
         type="button"
@@ -244,7 +241,6 @@ const Upload = () => {
       <Navbar />
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 pt-24 pb-24 md:pb-8 px-4">
         <div className="max-w-6xl mx-auto">
-          {/* ... (Header is the same) ... */}
            <div className="mb-10">
             <div className="flex items-center gap-4 mb-4">
               <div className="relative bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 p-4 rounded-2xl shadow-xl">
@@ -265,7 +261,6 @@ const Upload = () => {
 
 
           <form onSubmit={handleSubmit} className="space-y-8">
-            {/* ... (Project Details Card is the same) ... */}
             <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-1.5 h-8 bg-gradient-to-b from-indigo-600 to-purple-600 rounded-full"></div>
@@ -354,9 +349,26 @@ const Upload = () => {
                   />
                 </div>
               </div>
-            </div>
 
-            {/* --- 7. MODIFIED MEDIA SECTION --- */}
+              <div className="mt-6 space-y-2">
+                <label className="block text-sm font-bold text-gray-700">Technologies</label>
+                <div className="flex flex-wrap gap-3">
+                  {allTechnologies.map((tech) => (
+                    <label key={tech} className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={technologies.includes(tech)}
+                        onChange={() => handleTechChange(tech)}
+                        disabled={isLoading}
+                        className="h-5 w-5 rounded text-indigo-600 focus:ring-indigo-500"
+                      />
+                      <span className="font-medium text-gray-700">{tech}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </div>
+            
             <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
@@ -366,10 +378,8 @@ const Upload = () => {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Image Upload Section */}
                 <div>
                   <label className="block text-sm font-bold text-gray-700 mb-2">Project Images (Select multiple) *</label>
-                  {/* Grid for Image Previews */}
                   <div className="grid grid-cols-3 gap-3 mb-3">
                     {imagePreviews.map((preview, index) => (
                       <div key={index} className="relative aspect-square rounded-lg overflow-hidden border-2 border-gray-200">
@@ -384,7 +394,6 @@ const Upload = () => {
                         </button>
                       </div>
                     ))}
-                    {/* Add New Image Button */}
                     <button
                       type="button"
                       onClick={() => imageInputRef.current.click()}
@@ -402,11 +411,10 @@ const Upload = () => {
                     onChange={(e) => handleFileChange(e, 'image')}
                     className="hidden"
                     disabled={isLoading}
-                    multiple // <-- Allow multiple
+                    multiple
                   />
                 </div>
                 
-                {/* Video Upload Section */}
                 <div>
                    <label className="block text-sm font-bold text-gray-700 mb-2">Demo Video (Optional)</label>
                   <MediaUploadCard
@@ -421,9 +429,7 @@ const Upload = () => {
                 </div>
               </div>
             </div>
-            {/* --- END MODIFIED MEDIA SECTION --- */}
 
-            {/* ... (Submit Button is the same) ... */}
             <div className="flex flex-col sm:flex-row gap-4 justify-end">
               <button
                 type="button"
