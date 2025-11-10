@@ -184,7 +184,7 @@ const ProjectDetail = () => {
                 <video
                   src={selectedMedia.url}
                   controls
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                 >
                   Your browser does not support the video tag.
                 </video>
@@ -192,7 +192,7 @@ const ProjectDetail = () => {
                 <img
                   src={selectedMedia?.url}
                   alt="Project media"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                   onError={(e) => { e.target.src = 'https://placehold.co/1280x720/0d1117/3b82f6?text=Media+Error'; }}
                 />
               )}

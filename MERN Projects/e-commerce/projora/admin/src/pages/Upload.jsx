@@ -4,19 +4,17 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import Navbar from "../components/Navbar"
 import { HiOutlinePhotograph, HiOutlineVideoCamera } from 'react-icons/hi';
-import { Upload as UploadIcon, Sparkles, X, Check, Loader, Link as LinkIcon } from 'lucide-react'; // 1. Import LinkIcon
+import { Upload as UploadIcon, Sparkles, X, Check, Loader, Link as LinkIcon, Plus } from 'lucide-react';
 
-// Updated categories for Projora
 const categories = [
-  
   'Frontend',
   'Backend',
   'Full-Stack',
   'MERN Stack',
-    'Java',
-'JS',
-'React JS',
-'Next JS',
+  'Java',
+  'JS',
+  'React JS',
+  'Next JS',
   'Games',
   'Other',
 ];
@@ -27,52 +25,69 @@ const Upload = () => {
   const [category, setCategory] = useState('');
   const [price, setPrice] = useState('');
   const [liveDemoUrl, setLiveDemoUrl] = useState('');
-  
-  // --- 2. ZIP FILE STATE REMOVED ---
-  const [googleDriveLink, setGoogleDriveLink] = useState(''); // <-- ADDED
-  // const [zipFile, setZipFile] = useState(null); // <-- REMOVED
+  const [googleDriveLink, setGoogleDriveLink] = useState('');
 
-  const [imageFile, setImageFile] = useState(null);
+  // --- 1. MODIFIED FOR MULTIPLE IMAGES ---
+  const [imageFiles, setImageFiles] = useState([]); // Changed to array
   const [videoFile, setVideoFile] = useState(null);
 
-  const [imagePreview, setImagePreview] = useState('');
+  const [imagePreviews, setImagePreviews] = useState([]); // Changed to array
   const [videoPreview, setVideoPreview] = useState('');
+  // --- END MODIFICATION ---
 
   const [isLoading, setIsLoading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState('');
 
   const imageInputRef = useRef(null);
   const videoInputRef = useRef(null);
-  // const zipInputRef = useRef(null); // <-- REMOVED
 
+  // --- 2. MODIFIED handleFileChange ---
   const handleFileChange = (e, fileType) => {
-    const file = e.target.files[0];
-    if (!file) return;
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
 
     if (fileType === 'image') {
-      const previewUrl = URL.createObjectURL(file);
-      setImageFile(file);
-      setImagePreview(previewUrl);
+      const newFiles = Array.from(files);
+      const newPreviews = newFiles.map(file => URL.createObjectURL(file));
+
+      setImageFiles(prevFiles => [...prevFiles, ...newFiles]);
+      setImagePreviews(prevPreviews => [...prevPreviews, ...newPreviews]);
+
     } else if (fileType === 'video') {
+      const file = files[0];
       const previewUrl = URL.createObjectURL(file);
       setVideoFile(file);
       setVideoPreview(previewUrl);
     }
-    // No 'zip' type needed
   };
 
-  const clearFile = (fileType) => {
+  // --- 3. MODIFIED clearFile ---
+  const clearFile = (fileType, indexToRemove) => {
     if (fileType === 'image') {
-      setImageFile(null);
-      setImagePreview('');
-      if (imageInputRef.current) imageInputRef.current.value = null;
+      // If index is provided, remove one image
+      if (indexToRemove !== undefined) {
+        setImageFiles(prev => prev.filter((_, i) => i !== indexToRemove));
+        setImagePreviews(prev => {
+          const newPreviews = prev.filter((_, i) => i !== indexToRemove);
+          // Revoke the object URL to prevent memory leaks
+          URL.revokeObjectURL(prev[indexToRemove]);
+          return newPreviews;
+        });
+      } else {
+        // Clear all images
+        imagePreviews.forEach(url => URL.revokeObjectURL(url)); // Revoke all
+        setImageFiles([]);
+        setImagePreviews([]);
+        if (imageInputRef.current) imageInputRef.current.value = null;
+      }
     } else if (fileType === 'video') {
+      URL.revokeObjectURL(videoPreview);
       setVideoFile(null);
       setVideoPreview('');
       if (videoInputRef.current) videoInputRef.current.value = null;
     }
-    // No 'zip' type needed
   };
+  // --- END MODIFICATION ---
 
   const clearForm = () => {
     setTitle('');
@@ -80,75 +95,70 @@ const Upload = () => {
     setCategory('');
     setPrice('');
     setLiveDemoUrl('');
-    setGoogleDriveLink(''); // <-- ADDED
+    setGoogleDriveLink('');
     clearFile('image');
     clearFile('video');
-    // clearFile('zip'); // <-- REMOVED
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // --- 3. UPDATED VALIDATION ---
     if (!title || !category || !price || !liveDemoUrl || !googleDriveLink) {
       return toast.error('All fields, including Google Drive link, are required.');
     }
-    if (!imageFile) {
-      return toast.error('You must upload a Cover Image.');
+    // --- 4. MODIFIED VALIDATION ---
+    if (imageFiles.length === 0) {
+      return toast.error('You must upload at least one Cover Image.');
     }
-    // --- END UPDATED VALIDATION ---
+    // --- END MODIFICATION ---
 
     setIsLoading(true);
-    let projectImage = null;
     let demoVideo = null;
-    // let productFile = null; // <-- REMOVED
-
+    
+    // --- 5. MODIFIED IMAGE UPLOAD ---
+    let uploadedImages = [];
     try {
-      setUploadProgress('Uploading image...');
-      projectImage = await uploadToCloudinary(imageFile, 'image');
+      setUploadProgress(`Uploading ${imageFiles.length} image(s)...`);
       
-      if (videoFile) {
-        setUploadProgress('Uploading demo video...');
-        demoVideo = await uploadToCloudinary(videoFile, 'video');
-      }
-      
-      // --- 4. COMMENTED OUT ZIP UPLOAD ---
-      // setUploadProgress('Uploading product file...');
-      // productFile = await uploadToCloudinary(zipFile, 'raw');
-      // --- END COMMENTED OUT ---
+      // Use Promise.all to upload all images in parallel
+      const uploadPromises = imageFiles.map(file => 
+        uploadToCloudinary(file, 'image')
+      );
+      uploadedImages = await Promise.all(uploadPromises);
 
-      // Check if image upload failed
-      if (!projectImage) {
-        toast.error("Image upload failed. Cannot create project.");
+      // Check if any image upload failed
+      if (uploadedImages.some(img => img === null)) {
+        toast.error("One or more image uploads failed. Cannot create project.");
         setIsLoading(false);
         setUploadProgress('');
         return;
       }
 
+      if (videoFile) {
+        setUploadProgress('Uploading demo video...');
+        demoVideo = await uploadToCloudinary(videoFile, 'video');
+      }
+      
       setUploadProgress('Creating project...');
       const token = localStorage.getItem('token');
 
-      // --- 5. UPDATED DATA STRUCTURE ---
+      // --- 6. MODIFIED DATA STRUCTURE ---
       const projectPostData = {
         title,
         desc,
         category,
         price: Number(price),
         liveDemoUrl,
-        images: [projectImage], 
+        images: uploadedImages, // Send the array of uploaded images
         demoVideo: demoVideo, 
-        productFile: googleDriveLink, // <-- SEND THE LINK AS A STRING
+        productFile: googleDriveLink,
       };
-      // --- END UPDATED DATA ---
+      // --- END MODIFIED DATA ---
 
       await axios.post(
         `${import.meta.env.VITE_SERVER}/api/projects/create`,
         projectPostData,
-        {
-          headers: {
-            token: token,
-          },
-        }
+        { headers: { token: token } }
       );
 
       toast.success('Project created successfully!');
@@ -162,12 +172,11 @@ const Upload = () => {
       setUploadProgress('');
     }
   };
+  // --- END MODIFICATION ---
 
-  // This is the MediaUploadCard, it's unchanged
+  // (MediaUploadCard component is now only used for video)
   const MediaUploadCard = ({ type, icon: Icon, label, file, preview, inputRef, gradient }) => (
-     // ... (your existing MediaUploadCard code) ...
-     // This component is no longer used for the zip file
-     // but is still used for image and video
+    // ... (This component is unchanged, but we'll use it differently)
     <div className="group">
       <button
         type="button"
@@ -203,7 +212,7 @@ const Upload = () => {
 
         <input
           type="file"
-          accept={type === 'image' ? 'image/*' : type === 'video' ? 'video/*' : '.zip,.rar,.7z'}
+          accept={type === 'image' ? 'image/*' : 'video/*'}
           ref={inputRef}
           onChange={(e) => handleFileChange(e, type)}
           className="hidden"
@@ -236,7 +245,7 @@ const Upload = () => {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 pt-24 pb-24 md:pb-8 px-4">
         <div className="max-w-6xl mx-auto">
           {/* ... (Header is the same) ... */}
-          <div className="mb-10">
+           <div className="mb-10">
             <div className="flex items-center gap-4 mb-4">
               <div className="relative bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 p-4 rounded-2xl shadow-xl">
                 <UploadIcon className="w-8 h-8 text-white" strokeWidth={2.5} />
@@ -256,7 +265,7 @@ const Upload = () => {
 
 
           <form onSubmit={handleSubmit} className="space-y-8">
-            {/* --- 6. UPDATED PROJECT DETAILS CARD --- */}
+            {/* ... (Project Details Card is the same) ... */}
             <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-1.5 h-8 bg-gradient-to-b from-indigo-600 to-purple-600 rounded-full"></div>
@@ -264,7 +273,6 @@ const Upload = () => {
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* ... (Title, Category, Price, Live Demo URL inputs are the same) ... */}
                  <div className="space-y-2">
                   <label htmlFor="title" className="block text-sm font-bold text-gray-700">Title <span className="text-red-500">*</span></label>
                   <input
@@ -331,7 +339,6 @@ const Upload = () => {
                 />
               </div>
 
-              {/* --- 7. NEW GOOGLE DRIVE LINK INPUT --- */}
               <div className="mt-6 space-y-2">
                 <label htmlFor="googleDriveLink" className="block text-sm font-bold text-gray-700">Product Google Drive Link <span className="text-red-500">*</span></label>
                 <div className="relative">
@@ -343,13 +350,13 @@ const Upload = () => {
                     onChange={(e) => setGoogleDriveLink(e.target.value)}
                     disabled={isLoading}
                     className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
-                    placeholder="httpsE://drive.google.com/..."
+                    placeholder="https://drive.google.com/..."
                   />
                 </div>
               </div>
             </div>
 
-            {/* --- 8. UPDATED MEDIA CARDS (Zip card removed) --- */}
+            {/* --- 7. MODIFIED MEDIA SECTION --- */}
             <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
@@ -359,26 +366,62 @@ const Upload = () => {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <MediaUploadCard
-                  type="image"
-                  icon={HiOutlinePhotograph}
-                  label="Upload Cover Image *"
-                  file={imageFile}
-                  preview={imagePreview}
-                  inputRef={imageInputRef}
-                  gradient="from-pink-50 to-rose-50"
-                />
-                <MediaUploadCard
-                  type="video"
-                  icon={HiOutlineVideoCamera}
-                  label="Upload Demo Video (Optional)"
-                  file={videoFile}
-                  preview={videoPreview}
-                  inputRef={videoInputRef}
-                  gradient="from-blue-50 to-indigo-50"
-                />
+                {/* Image Upload Section */}
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">Project Images (Select multiple) *</label>
+                  {/* Grid for Image Previews */}
+                  <div className="grid grid-cols-3 gap-3 mb-3">
+                    {imagePreviews.map((preview, index) => (
+                      <div key={index} className="relative aspect-square rounded-lg overflow-hidden border-2 border-gray-200">
+                        <img src={preview} alt={`Preview ${index}`} className="w-full h-full object-cover" />
+                        <button
+                          type="button"
+                          onClick={() => clearFile('image', index)}
+                          disabled={isLoading}
+                          className="absolute top-1 right-1 z-10 bg-red-500 hover:bg-red-600 text-white p-1 rounded-full shadow-lg"
+                        >
+                          <X className="w-3 h-3" strokeWidth={3} />
+                        </button>
+                      </div>
+                    ))}
+                    {/* Add New Image Button */}
+                    <button
+                      type="button"
+                      onClick={() => imageInputRef.current.click()}
+                      disabled={isLoading}
+                      className="flex flex-col items-center justify-center aspect-square bg-gray-50 text-gray-400 rounded-lg border-3 border-dashed border-gray-300 hover:border-indigo-400 hover:text-indigo-400 transition-all"
+                    >
+                      <Plus className="w-8 h-8" />
+                      <span className="text-xs font-semibold">Add Image</span>
+                    </button>
+                  </div>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    ref={imageInputRef}
+                    onChange={(e) => handleFileChange(e, 'image')}
+                    className="hidden"
+                    disabled={isLoading}
+                    multiple // <-- Allow multiple
+                  />
+                </div>
+                
+                {/* Video Upload Section */}
+                <div>
+                   <label className="block text-sm font-bold text-gray-700 mb-2">Demo Video (Optional)</label>
+                  <MediaUploadCard
+                    type="video"
+                    icon={HiOutlineVideoCamera}
+                    label="Upload Demo Video"
+                    file={videoFile}
+                    preview={videoPreview}
+                    inputRef={videoInputRef}
+                    gradient="from-blue-50 to-indigo-50"
+                  />
+                </div>
               </div>
             </div>
+            {/* --- END MODIFIED MEDIA SECTION --- */}
 
             {/* ... (Submit Button is the same) ... */}
             <div className="flex flex-col sm:flex-row gap-4 justify-end">

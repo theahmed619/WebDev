@@ -6,18 +6,17 @@ import toast from 'react-hot-toast';
 import Navbar from "../components/Navbar";
 import { PageLoader } from '../components/Loader';
 import { HiOutlinePhotograph, HiOutlineVideoCamera } from 'react-icons/hi';
-import { Upload as UploadIcon, X, Check, Loader, Link as LinkIcon } from 'lucide-react'; // 1. Import LinkIcon
+import { Upload as UploadIcon, X, Check, Loader, Link as LinkIcon, Plus } from 'lucide-react';
 
 const categories = [
-  
-    'Frontend',
+  'Frontend',
   'Backend',
   'Full-Stack',
   'MERN Stack',
-    'Java',
-'JS',
-'React JS',
-'Next JS',
+  'Java',
+  'JS',
+  'React JS',
+  'Next JS',
   'Games',
   'Other',
 ];
@@ -32,22 +31,18 @@ const EditProject = () => {
   const [category, setCategory] = useState('');
   const [price, setPrice] = useState('');
   const [liveDemoUrl, setLiveDemoUrl] = useState('');
-  // --- 2. Replaced zip state with link state ---
   const [googleDriveLink, setGoogleDriveLink] = useState(''); 
 
-  // Old media previews
-  const [oldImagePreview, setOldImagePreview] = useState('');
+  // --- 1. MODIFIED STATE FOR MULTIPLE IMAGES ---
+  const [oldImages, setOldImages] = useState([]); // To show current images
   const [oldVideoPreview, setOldVideoPreview] = useState('');
-  // const [oldZipName, setOldZipName] = useState(''); // <-- REMOVED
 
-  // New file objects
-  const [newImageFile, setNewImageFile] = useState(null);
+  const [newImageFiles, setNewImageFiles] = useState([]); // For new uploads
   const [newVideoFile, setNewVideoFile] = useState(null);
-  // const [newZipFile, setNewZipFile] = useState(null); // <-- REMOVED
 
-  // New file previews
-  const [newImagePreview, setNewImagePreview] = useState('');
+  const [newImagePreviews, setNewImagePreviews] = useState([]); // For new previews
   const [newVideoPreview, setNewVideoPreview] = useState('');
+  // --- END MODIFICATION ---
 
   // Loading states
   const [isLoading, setIsLoading] = useState(false);
@@ -56,7 +51,6 @@ const EditProject = () => {
 
   const imageInputRef = useRef(null);
   const videoInputRef = useRef(null);
-  // const zipInputRef = useRef(null); // <-- REMOVED
 
   // 1. Fetch existing project data
   useEffect(() => {
@@ -75,13 +69,16 @@ const EditProject = () => {
         setCategory(project.category);
         setPrice(project.price.toString());
         setLiveDemoUrl(project.liveDemoUrl);
+        setGoogleDriveLink(project.productFile || '');
         
-        // --- 3. Load the Google Drive link string ---
-        setGoogleDriveLink(project.productFile || ''); // <-- UPDATED
-        
-        // Set old previews
-        if (project.images?.[0]) setOldImagePreview(project.images[0].url);
-        if (project.demoVideo) setOldVideoPreview(project.demoVideo.url);
+        // --- 2. MODIFIED TO LOAD IMAGE ARRAY ---
+        if (project.images) {
+          setOldImages(project.images); // Set array of { public_id, url }
+        }
+        if (project.demoVideo) {
+          setOldVideoPreview(project.demoVideo.url);
+        }
+        // --- END MODIFICATION ---
 
       } catch (error) {
         toast.error("Could not fetch project data.");
@@ -93,20 +90,46 @@ const EditProject = () => {
     fetchProject();
   }, [id, navigate]);
 
-  // 2. Handle *new* file changes
+  // --- 3. MODIFIED handleFileChange ---
   const handleFileChange = (e, fileType) => {
-    const file = e.target.files[0];
-    if (!file) return;
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
 
     if (fileType === 'image') {
-      setNewImageFile(file);
-      setNewImagePreview(URL.createObjectURL(file));
+      const newFiles = Array.from(files);
+      const newPreviews = newFiles.map(file => URL.createObjectURL(file));
+      
+      // Clear old images when new ones are added
+      setOldImages([]); 
+      
+      setNewImageFiles(prevFiles => [...prevFiles, ...newFiles]);
+      setNewImagePreviews(prevPreviews => [...prevPreviews, ...newPreviews]);
+
     } else if (fileType === 'video') {
+      const file = files[0];
       setNewVideoFile(file);
       setNewVideoPreview(URL.createObjectURL(file));
+      setOldVideoPreview(''); // Clear old video
     }
-    // No zip logic needed
   };
+  // --- END MODIFICATION ---
+
+  // --- 4. MODIFIED clearFile (for new images) ---
+  const clearNewFile = (fileType, indexToRemove) => {
+     if (fileType === 'image') {
+        setNewImageFiles(prev => prev.filter((_, i) => i !== indexToRemove));
+        setNewImagePreviews(prev => {
+          const newPreviews = prev.filter((_, i) => i !== indexToRemove);
+          URL.revokeObjectURL(prev[indexToRemove]);
+          return newPreviews;
+        });
+    } else if (fileType === 'video') {
+        URL.revokeObjectURL(newVideoPreview);
+        setNewVideoFile(null);
+        setNewVideoPreview('');
+    }
+  }
+  // --- END MODIFICATION ---
 
   // 3. Handle submit
   const handleSubmit = async (e) => {
@@ -117,25 +140,36 @@ const EditProject = () => {
     }
 
     setIsLoading(true);
-    // --- 4. Add googleDriveLink to the update data ---
     let updateData = { 
       title, 
       desc, 
       category, 
       price: Number(price), 
       liveDemoUrl, 
-      productFile: googleDriveLink // <-- UPDATED
+      productFile: googleDriveLink
     };
 
     try {
-      // 4. Upload *only* the new image/video files
-      if (newImageFile) {
-        setUploadProgress('Uploading new image...');
-        const projectImage = await uploadToCloudinary(newImageFile, 'image');
-        if (projectImage) {
-          updateData.images = [projectImage]; // Send as array
+      // --- 5. MODIFIED UPLOAD LOGIC ---
+      // Only upload if new images were added
+      if (newImageFiles.length > 0) {
+        setUploadProgress(`Uploading ${newImageFiles.length} new image(s)...`);
+        const uploadPromises = newImageFiles.map(file => 
+          uploadToCloudinary(file, 'image')
+        );
+        const uploadedImages = await Promise.all(uploadPromises);
+
+        if (uploadedImages.some(img => img === null)) {
+          toast.error("One or more image uploads failed.");
+          setIsLoading(false);
+          return;
         }
+        updateData.images = uploadedImages; // Set the new array
+      } else {
+        // No new images, so send back the *old* images to keep them
+        updateData.images = oldImages;
       }
+
       if (newVideoFile) {
         setUploadProgress('Uploading new video...');
         const demoVideo = await uploadToCloudinary(newVideoFile, 'video');
@@ -143,13 +177,11 @@ const EditProject = () => {
           updateData.demoVideo = demoVideo;
         }
       }
-
-      // --- 5. REMOVED zip upload logic ---
+      // --- END MODIFICATION ---
 
       setUploadProgress('Saving changes...');
       const token = localStorage.getItem('token');
 
-      // 5. Send PUT request
       await axios.put(
         `${import.meta.env.VITE_SERVER}/api/projects/${id}`,
         updateData,
@@ -157,7 +189,7 @@ const EditProject = () => {
       );
 
       toast.success('Project updated successfully!');
-      navigate('/projects'); // Go back to projects list
+      navigate('/projects');
 
     } catch (error) {
       console.error('Project update failed:', error);
@@ -168,7 +200,7 @@ const EditProject = () => {
     }
   };
   
-  // Sub-component for editing media (unchanged, still used for image/video)
+  // (This sub-component is now only used for video)
   const MediaEditCard = ({ type, icon: Icon, label, oldPreview, newPreview, inputRef }) => {
     const preview = newPreview || oldPreview;
     return (
@@ -222,11 +254,10 @@ const EditProject = () => {
         <h1 className="text-4xl font-black text-gray-900 mb-6">Edit Project</h1>
         
         <form onSubmit={handleSubmit} className="space-y-8">
-          {/* --- 6. UPDATED Basic Info Card --- */}
+          {/* ... (Project Details Card is the same) ... */}
           <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
             <h2 className="text-2xl font-black text-gray-900 mb-6">Project Details</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* ... (Title, Category, Price, Live Demo URL inputs are the same) ... */}
               <div className="space-y-2">
                 <label htmlFor="title" className="font-bold text-gray-700">Title</label>
                 <input type="text" id="title" value={title} onChange={(e) => setTitle(e.target.value)} disabled={isLoading} className="w-full p-3 rounded-xl border-2" />
@@ -247,13 +278,11 @@ const EditProject = () => {
                 <input type="text" id="liveDemoUrl" value={liveDemoUrl} onChange={(e) => setLiveDemoUrl(e.target.value)} disabled={isLoading} className="w-full p-3 rounded-xl border-2" />
               </div>
             </div>
-            {/* ... (Description textarea is the same) ... */}
             <div className="mt-6 space-y-2">
               <label htmlFor="desc" className="font-bold text-gray-700">Description</label>
               <textarea id="desc" rows={5} value={desc} onChange={(e) => setDesc(e.target.value)} disabled={isLoading} className="w-full p-3 rounded-xl border-2" />
             </div>
 
-            {/* --- 7. NEW Google Drive Link input --- */}
             <div className="mt-6 space-y-2">
               <label htmlFor="googleDriveLink" className="block text-sm font-bold text-gray-700">Product Google Drive Link <span className="text-red-500">*</span></label>
               <div className="relative">
@@ -265,30 +294,82 @@ const EditProject = () => {
                   onChange={(e) => setGoogleDriveLink(e.target.value)}
                   disabled={isLoading}
                   className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
-                  placeholder="httpsE://drive.google.com/..."
+                  placeholder="https://drive.google.com/..."
                 />
               </div>
             </div>
           </div>
 
-          {/* --- 8. UPDATED Media Uploads Card --- */}
+          {/* --- 6. MODIFIED MEDIA SECTION --- */}
           <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
             <h2 className="text-2xl font-black text-gray-900 mb-6">Replace Media</h2>
-            {/* Updated to 2 columns */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <MediaEditCard
-                type="image" icon={HiOutlinePhotograph} label="Replace Cover Image"
-                oldPreview={oldImagePreview} newPreview={newImagePreview}
-                inputRef={imageInputRef}
-              />
-              <MediaEditCard
-                type="video" icon={HiOutlineVideoCamera} label="Replace Demo Video"
-                oldPreview={oldVideoPreview} newPreview={newVideoPreview}
-                inputRef={videoInputRef}
-              />
-              {/* Zip card removed */}
+              
+              {/* Image Upload Section */}
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Replace Project Images</label>
+                <p className="text-xs text-gray-500 mb-3">Uploading new images will replace all old ones.</p>
+                {/* Grid for Image Previews */}
+                <div className="grid grid-cols-3 gap-3 mb-3">
+                  {/* Show NEW previews if they exist */}
+                  {newImagePreviews.length > 0 ? (
+                    newImagePreviews.map((preview, index) => (
+                      <div key={index} className="relative aspect-square rounded-lg overflow-hidden border-2 border-green-400">
+                        <img src={preview} alt={`Preview ${index}`} className="w-full h-full object-cover" />
+                        <button
+                          type="button"
+                          onClick={() => clearNewFile('image', index)}
+                          disabled={isLoading}
+                          className="absolute top-1 right-1 z-10 bg-red-500 hover:bg-red-600 text-white p-1 rounded-full shadow-lg"
+                        >
+                          <X className="w-3 h-3" strokeWidth={3} />
+                        </button>
+                      </div>
+                    ))
+                  ) : (
+                    // Otherwise, show OLD images
+                    oldImages.map((image, index) => (
+                       <div key={image.public_id} className="relative aspect-square rounded-lg overflow-hidden border-2 border-gray-200">
+                        <img src={image.url} alt={`Old Preview ${index}`} className="w-full h-full object-cover" />
+                         <div className="absolute top-1 left-1 bg-gray-900/70 text-white text-xs px-2 py-0.5 rounded-full">Current</div>
+                      </div>
+                    ))
+                  )}
+                  {/* Add New Image Button */}
+                  <button
+                    type="button"
+                    onClick={() => imageInputRef.current.click()}
+                    disabled={isLoading}
+                    className="flex flex-col items-center justify-center aspect-square bg-gray-50 text-gray-400 rounded-lg border-3 border-dashed border-gray-300 hover:border-indigo-400 hover:text-indigo-400 transition-all"
+                  >
+                    <Plus className="w-8 h-8" />
+                    <span className="text-xs font-semibold">Add New</span>
+                  </button>
+                </div>
+                <input
+                  type="file"
+                  accept="image/*"
+                  ref={imageInputRef}
+                  onChange={(e) => handleFileChange(e, 'image')}
+                  className="hidden"
+                  disabled={isLoading}
+                  multiple // <-- Allow multiple
+                />
+              </div>
+
+              {/* Video Upload Section */}
+              <div>
+                 <label className="block text-sm font-bold text-gray-700 mb-2">Replace Demo Video (Optional)</label>
+                <MediaEditCard
+                  type="video" icon={HiOutlineVideoCamera} label="Replace Demo Video"
+                  oldPreview={oldVideoPreview} newPreview={newVideoPreview}
+                  inputRef={videoInputRef}
+                />
+              </div>
+
             </div>
           </div>
+          {/* --- END MODIFIED MEDIA SECTION --- */}
 
           {/* ... (Submit Button is the same) ... */}
            <div className="flex justify-center">
