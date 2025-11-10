@@ -9,10 +9,15 @@ import { HiOutlinePhotograph, HiOutlineVideoCamera } from 'react-icons/hi';
 import { Upload as UploadIcon, X, Check, Loader, Link as LinkIcon } from 'lucide-react'; // 1. Import LinkIcon
 
 const categories = [
-  'MERN Stack',
-  'Frontend',
+  
+    'Frontend',
   'Backend',
   'Full-Stack',
+  'MERN Stack',
+    'Java',
+'JS',
+'React JS',
+'Next JS',
   'Games',
   'Other',
 ];
