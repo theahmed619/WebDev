@@ -8,10 +8,15 @@ import { Upload as UploadIcon, Sparkles, X, Check, Loader, Link as LinkIcon } fr
 
 // Updated categories for Projora
 const categories = [
-  'MERN Stack',
+  
   'Frontend',
   'Backend',
   'Full-Stack',
+  'MERN Stack',
+    'Java',
+'JS',
+'React JS',
+'Next JS',
   'Games',
   'Other',
 ];
