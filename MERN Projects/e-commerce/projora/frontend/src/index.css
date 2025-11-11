@@ -1,1 +1,36 @@
-@import "tailwindcss";
+@import "tailwindcss"; 
+
+/* 1. Use the correct Tailwind directives */
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities; */
+
+/* 2. Add your global theme variables (with valid spaces) */
+
+  /* Light Mode (default) */
+/*:root {
+--color-background:249 250 251; /* bg-gray-50 
+--color-foreground:255 255 255; /* bg-white 
+--color-border:229 231 235; /* border-gray-200 
+--color-text-primary:17 24 39; /* text-gray-900 
+--color-text-secondary:55 65 81; /* text-gray-700 
+--color-text-muted:107 114 128; /* text-gray-500 
+} */
+
+
+  /* Dark Mode */
+/* .dark {
+
+  --color-background: 17 24 39; /* bg-gray-900 
+  --color-foreground: 31 41 55; /* bg-gray-800 
+  --color-border: 55 65 81; /* border-gray-700 
+
+  --color-text-primary: 243 244 246; /* text-gray-100 
+  --color-text-secondary: 209 213 219; /* text-gray-300 
+  --color-text-muted: 107 114 128; /* text-gray-500 
+} */
+
+/* 3. Add a base background color */
+/* body {
+  @apply bg-background text-secondary;
+} */

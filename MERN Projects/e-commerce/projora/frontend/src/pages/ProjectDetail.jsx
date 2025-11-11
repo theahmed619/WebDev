@@ -26,7 +26,7 @@ const ProjectDetail = () => {
 
   const { id } = useParams();
   const navigate = useNavigate();
-  const { user, isAuth, getCurrentUser } = UserData(); // Get user data
+  const { user, isAuth, getCurrentUser } = UserData();
   const server = import.meta.env.VITE_SERVER;
 
   useEffect(() => {
@@ -35,7 +35,6 @@ const ProjectDetail = () => {
         setLoading(true);
         const { data } = await axios.get(`${server}/api/projects/${id}`);
         setProject(data.project);
-        // Set initial media: video if available, else first image
         if (data.project.demoVideo?.url) {
           setSelectedMedia({ type: 'video', url: data.project.demoVideo.url });
         } else if (data.project.images?.[0]?.url) {
@@ -67,14 +66,12 @@ const ProjectDetail = () => {
 
     try {
       const token = localStorage.getItem("token");
-      // 1. Create Order
       const { data: orderData } = await axios.post(
         `${server}/api/payment/create-order`,
         { projectId: project._id, amount: project.price },
         { headers: { token } }
       );
 
-      // 2. Configure Razorpay Options
       const options = {
         key: import.meta.env.VITE_RAZORPAY_KEY_ID,
         amount: orderData.order.amount,
@@ -83,7 +80,6 @@ const ProjectDetail = () => {
         description: `Purchase: ${project.title}`,
         order_id: orderData.order.id,
         handler: async (response) => {
-          // 3. Verify Payment
           try {
             await axios.post(
               `${server}/api/payment/verify`,
@@ -92,11 +88,9 @@ const ProjectDetail = () => {
             );
             
             toast.success("Payment successful! Your project is processing.");
-            // The webhook will handle adding the project.
-            // We'll refresh the user data to check for the purchase.
             setTimeout(() => {
-              getCurrentUser(); // Refresh user data from context
-            }, 3000); // Give webhook time to process
+              getCurrentUser();
+            }, 3000);
 
           } catch (err) {
             toast.error("Payment verification failed. Please contact support.");
@@ -107,11 +101,10 @@ const ProjectDetail = () => {
           email: user.email,
         },
         theme: {
-          color: "#2563EB", // Blue
+          color: "#2563EB",
         },
       };
 
-      // 4. Open Razorpay Checkout
       const rzp = new window.Razorpay(options);
       rzp.open();
 
@@ -132,7 +125,6 @@ const ProjectDetail = () => {
         { headers: { token } }
       );
       
-      // Trigger download
       window.open(data.downloadUrl, '_blank');
       toast.success("Download starting...");
 
@@ -160,7 +152,6 @@ const ProjectDetail = () => {
     );
   }
 
-  // Check if user has purchased this project
   const hasPurchased = user?.purchasedProjects?.includes(project._id);
 
   return (
@@ -235,6 +226,27 @@ const ProjectDetail = () => {
             </div>
 
             <p className="text-gray-300 mb-8">{project.desc}</p>
+
+            {/* --- THIS IS THE FIX --- */}
+            <div className="mb-8">
+              <h3 className="text-xl font-bold text-white mb-4">Technologies Used</h3>
+              <div className="flex flex-wrap gap-2">
+                {project.technologies && project.technologies.length > 0 ? (
+                  project.technologies.map((tech) => (
+                    <span 
+                      key={tech} 
+                      className="flex items-center gap-1.5 bg-gray-700 text-blue-300 px-3 py-1 rounded-full text-sm font-medium"
+                    >
+                      <CheckCircle className="w-4 h-4" />
+                      {tech}
+                    </span>
+                  ))
+                ) : (
+                  <p className="text-gray-500 text-sm">No technologies listed for this project.</p>
+                )}
+              </div>
+            </div>
+            {/* --- END OF FIX --- */}
 
             {/* Action Buttons */}
             <div className="space-y-4">
