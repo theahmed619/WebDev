@@ -107,7 +107,7 @@ const Navbar = () => {
         </NavLink>
 
         {/* Profile */}
-        <NavLink to="/profile" className_={getMobileLinkClass}>
+        <NavLink to="/profile" className={getMobileLinkClass}>
           <UserCircle size={24} className="mb-1" />
           <span className="text-xs">Profile</span>
         </NavLink>
