@@ -8,25 +8,25 @@ export const UserProvider = ({ children }) => {
 
   // --- 1. ADD NEW THEME STATE ---
   // It reads from localStorage first, or defaults to "dark"
-  const [theme, setTheme] = useState(localStorage.getItem("theme") || "dark");
+  // const [theme, setTheme] = useState(localStorage.getItem("theme") || "dark");
 
   // --- 2. ADD NEW THEME TOGGLER FUNCTION ---
-  const toggleTheme = () => {
-    const newTheme = theme === "dark" ? "light" : "dark";
-    setTheme(newTheme);
-    localStorage.setItem("theme", newTheme);
-  };
+  // const toggleTheme = () => {
+  //   const newTheme = theme === "dark" ? "light" : "dark";
+  //   setTheme(newTheme);
+  //   localStorage.setItem("theme", newTheme);
+  // };
 
   // --- 3. ADD NEW EFFECT TO APPLY THEME ---
   // This effect runs when the 'theme' state changes
-  useEffect(() => {
-    const root = document.documentElement; // This is the <html> tag
-    if (theme === "dark") {
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
-    }
-  }, [theme]);
+  // useEffect(() => {
+  //   const root = document.documentElement; // This is the <html> tag
+  //   if (theme === "dark") {
+  //     root.classList.add("dark");
+  //   } else {
+  //     root.classList.remove("dark");
+  //   }
+  // }, [theme]);
 
   // State for forms (login/register buttons)
   const [btnLoading, setBtnLoading] = useState(false);
@@ -165,8 +165,7 @@ export const UserProvider = ({ children }) => {
         loginWithGoogle,
         logoutHandler,
         getCurrentUser, 
-        theme,
-        toggleTheme,
+   
       }}
     >
       {children}

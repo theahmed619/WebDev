@@ -19,7 +19,8 @@ app.use(express.json());
 
 const allowedOrigins = [
   "https://projora-v1.vercel.app",
-  "https://projora-admin-v1.vercel.app"
+  "https://projora-admin-v1.vercel.app",
+  "http://localhost:5173"
 ];
 
 app.use(cors({
