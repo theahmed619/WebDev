@@ -16,8 +16,14 @@ const port =process.env.PORT || 8000
 
 // using middleware
 app.use(express.json());
+
+const allowedOrigins = [
+  "https://projora-v1.vercel.app",
+  "https://projora-admin-v1.vercel.app"
+];
+
 app.use(cors({
-  origin: "https://projora-v1.vercel.app",
+  origin: allowedOrigins,
   credentials: true
 }));
 
