@@ -19,10 +19,10 @@ const deleteCloudinaryMedia = async (public_id, resource_type = 'image') => {
  */
 export const createProject = async (req, res) => {
   try {
-    const { title, desc, category, price, liveDemoUrl, images, demoVideo, productFile } = req.body;
+    const { title, desc, category, price, liveDemoUrl, images, demoVideo, productFile , technologies} = req.body;
 
     // --- 1. Validation ---
-    if (!title || !desc || !category || !price || !liveDemoUrl || !productFile,technologies) {
+    if (!title || !desc || !category || !price || !liveDemoUrl || !productFile) {
       return res.status(400).json({
         message: 'Title, desc, category, price, live demo, and product file are required.',
       });

@@ -1,18 +1,23 @@
 import React from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { UserData } from '../context/UserContext'; 
+// --- 1. IMPORT THE NEW HOOK ---
+import { useTheme } from '../context/ThemeContext';
 import { 
   Home, 
   Search, 
   UserCircle,
-  Moon, // 1. Import Moon
-  Sun   // 2. Import Sun
+  Moon,
+  Sun
 } from 'lucide-react';
 import Logo from "../../public/shopping-bag.png";
 
 const Navbar = () => {
-  // 3. Get the theme state and toggle function
-  const { logoutHandler, theme, toggleTheme } = UserData(); 
+  // --- 2. SPLIT THE HOOKS ---
+  const { logoutHandler } = UserData(); // Get auth logic
+  const { theme, toggleTheme } = useTheme(); // Get theme logic
+  // --- END OF FIX ---
+  
   const navigate = useNavigate();
 
   const getMobileLinkClass = ({ isActive }) => 
@@ -22,6 +27,8 @@ const Navbar = () => {
 
   return (
     <>
+      {/* ... (rest of your Navbar JSX is correct) ... */}
+      
       {/* ====== TOP NAVBAR (Desktop) ====== */}
       <nav className="hidden md:flex bg-gray-900 border-b border-gray-700 text-white w-full p-4 justify-between items-center fixed top-0 z-50 h-20">
         
