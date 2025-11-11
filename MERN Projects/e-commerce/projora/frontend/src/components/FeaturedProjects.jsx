@@ -11,17 +11,15 @@ const FeaturedProjects = () => {
   const [loading, setLoading] = useState(true);
   const server = import.meta.env.VITE_SERVER;
 
-  // --- 1. THIS IS THE FIX ---
-  const [visibleCount, setVisibleCount] = useState(3); // Start by showing 3
+  const [visibleCount, setVisibleCount] = useState(3);
   const [loadMoreLoading, setLoadMoreLoading] = useState(false);
-  // --- END FIX ---
 
   useEffect(() => {
     const fetchProjects = async () => {
       try {
         setLoading(true);
         const { data } = await axios.get(`${server}/api/projects/all`);
-        setAllProjects(data.projects); // Get all projects
+        setAllProjects(data.projects);
       } catch (error) {
         console.log(error);
         toast.error("Could not fetch featured projects.");
@@ -32,17 +30,15 @@ const FeaturedProjects = () => {
     fetchProjects();
   }, [server]);
 
-  // --- 2. THIS IS THE FIX ---
   const loadMore = () => {
     setLoadMoreLoading(true);
     setTimeout(() => {
-      setVisibleCount(prevCount => prevCount + 3); // Show 3 more
+      setVisibleCount(prevCount => prevCount + 3);
       setLoadMoreLoading(false);
     }, 500);
   };
 
   const hasMoreProjects = visibleCount < allProjects.length;
-  // --- END FIX ---
 
   return (
     <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
@@ -69,8 +65,10 @@ const FeaturedProjects = () => {
           <h2 className="text-2xl font-semibold">No Projects Yet</h2>
         </div>
       ) : (
-        // 4. Grid now uses the new visibleCount
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        // --- THIS IS THE FIX ---
+        // Changed grid-cols-1 to sm:grid-cols-2
+        // It will now be 1 col on extra-small, and 2 cols on small and medium
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {allProjects.slice(0, visibleCount).map((project) => (
             <ProjectCard key={project._id} project={project} />
           ))}
