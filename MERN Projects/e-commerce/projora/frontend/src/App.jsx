@@ -2,19 +2,17 @@ import React from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { UserData } from "./context/UserContext";
 
-// --- 1. Import Projora Pages ---
+// --- Import all pages ---
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Registration";
 import Profile from "./pages/Profile";
 import Navbar from "./components/Navbar";
 import { PageLoader } from "./components/Loader";
-
-// --- 2. Import New Project/E-commerce Pages ---
 import Projects from "./pages/Projects";
 import ProjectDetail from "./pages/ProjectDetail";
 import ProjectsByCategory from "./pages/ProjectsByCategory";
-import Search from "./pages/Search"; // This is correct
+import Search from "./pages/Search";
 import Legal from "./pages/Legal";
 import Contact from "./pages/Contact";
 import SelectTech from "./pages/SelectTech";
@@ -28,10 +26,11 @@ const App = () => {
 
   return (
     <>
-      {isAuth && <Navbar />}
+      {/* 1. Navbar is now OUTSIDE the isAuth check, so it always shows */}
+      <Navbar />
 
       <Routes>
-        {/* --- Auth Routes (Public-only) --- */}
+        {/* --- Auth Routes (Only for logged-out users) --- */}
         <Route
           path="/login"
           element={!isAuth ? <Login /> : <Navigate to="/" />}
@@ -41,51 +40,27 @@ const App = () => {
           element={!isAuth ? <Register /> : <Navigate to="/" />}
         />
 
-        {/* --- Protected Routes (Auth-only) --- */}
+        {/* --- 2. PUBLIC Routes (Everyone can see these) --- */}
+        <Route path="/" element={<Home />} />
+        <Route path="/projects" element={<Projects />} />
+        <Route path="/project/:id" element={<ProjectDetail />} />
         <Route
-          path="/"
-          element={isAuth ? <Home /> : <Navigate to="/login" />}
+          path="/projects/category/:categoryName"
+          element={<ProjectsByCategory />}
         />
+        <Route path="/search" element={<Search />} />
+        <Route path="/legal" element={<Legal />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/select-tech" element={<SelectTech />} />
+
+        {/* --- 3. PROTECTED Route (Only for logged-in users) --- */}
         <Route
           path="/profile"
           element={isAuth ? <Profile /> : <Navigate to="/login" />}
         />
         
-        {/* --- New Projora Routes --- */}
-        <Route
-          path="/projects"
-          element={isAuth ? <Projects /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/project/:id"
-          element={isAuth ? <ProjectDetail /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/projects/category/:categoryName"
-          element={isAuth ? <ProjectsByCategory /> : <Navigate to="/login" />}
-        />
-        
-        {/* --- CRITICAL FIX: Moved and corrected the Search route --- */}
-        <Route
-          path="/search"
-          element={isAuth ? <Search /> : <Navigate to="/login" />}
-        />
-
-        <Route
-          path="/legal"
-          element={isAuth ? <Legal /> : <Navigate to="/login" />}
-        />
-         <Route
-          path="/contact-us"
-          element={isAuth ? <Contact /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/select-tech"
-          element={isAuth ? <SelectTech /> : <Navigate to="/login" />}
-        />
-        
         {/* Fallback route */}
-        <Route path="*" element={<Navigate to={isAuth ? "/" : "/login"} />} />
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </>
   );

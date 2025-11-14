@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { HiChevronLeft, HiChevronRight } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';
+// 1. Import Framer Motion
+import { motion, AnimatePresence } from 'framer-motion';
 
 const slides = [
+  // ... (your slides array is perfect)
   {
     image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=2070&auto=format&fit=crop',
     title: 'Welcome to Projora',
@@ -22,14 +25,30 @@ const slides = [
     title: 'Contact for Customize Project',
     subtitle: 'Explore the latest update with new dynamic auth.',
     cta: 'Contact Us',
-    link: '/contact-us',
+    link: '/contact', // Fixed link
   },
 ];
+
+// 2. Define animation variants
+const textVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    transition: { duration: 0.5, ease: "easeOut" } 
+  },
+  exit: { 
+    opacity: 0, 
+    y: -20, 
+    transition: { duration: 0.3, ease: "easeIn" } 
+  }
+};
 
 const Slidebar = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const navigate = useNavigate();
 
+  // ... (nextSlide, prevSlide, useEffect are all correct)
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
   };
@@ -43,45 +62,57 @@ const Slidebar = () => {
     return () => clearInterval(slideInterval);
   }, []);
 
-  // This is the max-width container that centers your component
   return (
-    <div className="relative w-full max-w-7xl mx-auto overflow-hidden rounded-2xl shadow-lg my-4">
-      {/* Slide Container */}
+    <div className="relative w-full max-w-7xl mx-auto overflow-hidden rounded-2xl shadow-lg my-4 border border-white/10 bg-black/10 backdrop-blur-sm">
       <div 
         className="flex transition-transform duration-700 ease-in-out"
         style={{ transform: `translateX(-${currentSlide * 100}%)` }}
       >
         {slides.map((slide, index) => (
-          // --- 1. REDUCED HEIGHT ---
           <div key={index} className="flex-shrink-0 w-full h-[250px] md:h-[350px] lg:h-[400px] relative">
-            <img 
+            {/* 3. Add subtle scale animation to image */}
+            <motion.img 
               src={slide.image} 
               alt={slide.title} 
               className="w-full h-full object-cover"
               onError={(e) => e.target.src = 'https://placehold.co/1200x400/0d1117/3b82f6?text=Image+Error'}
+              animate={{ scale: index === currentSlide ? 1.1 : 1 }}
+              transition={{ duration: 7, ease: "easeInOut" }}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-            
-            {/* --- 2. ADJUSTED TEXT AND PADDING --- */}
-            <div className="absolute bottom-0 left-0 p-6 md:p-8 text-left">
-              <h2 className="text-2xl md:text-4xl font-bold text-white shadow-lg">
-                {slide.title}
-              </h2>
-              <p className="text-md md:text-lg text-white/90 mt-2 shadow-lg max-w-lg">
-                {slide.subtitle}
-              </p>
-              <button
-                onClick={() => navigate(slide.link)}
-                className="mt-4 bg-blue-600 text-white font-semibold py-2 px-5 rounded-lg shadow-md hover:bg-blue-700 transition-all"
-              >
-                {slide.cta}
-              </button>
-            </div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
           </div>
         ))}
       </div>
 
-      {/* Navigation (Unchanged) */}
+      {/* 4. Wrap text content in AnimatePresence */}
+      <div className="absolute bottom-0 left-0 p-6 md:p-8 text-left w-full">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentSlide} // This tells AnimatePresence to animate when the key changes
+            variants={textVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+          >
+            <h2 className="text-2xl md:text-4xl font-bold text-white shadow-lg">
+              {slides[currentSlide].title}
+            </h2>
+            <p className="text-md md:text-lg text-white/90 mt-2 shadow-lg max-w-lg">
+              {slides[currentSlide].subtitle}
+            </p>
+            <motion.button
+              onClick={() => navigate(slides[currentSlide].link)}
+              className="mt-4 bg-blue-600 text-white font-semibold py-2 px-5 rounded-lg shadow-md hover:bg-blue-700 transition-all"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              {slides[currentSlide].cta}
+            </motion.button>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/* ... (Navigation buttons and dots are the same) ... */}
       <button 
         onClick={prevSlide}
         className="absolute top-1/2 left-2 md:left-4 -translate-y-1/2 bg-white/30 p-2 rounded-full text-white hover:bg-white/50 transition-all z-10"

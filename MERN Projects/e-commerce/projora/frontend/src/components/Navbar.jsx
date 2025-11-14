@@ -10,7 +10,8 @@ import {
   Moon,
   Sun
 } from 'lucide-react';
-import Logo from "../../public/shopping-bag.png";
+import Logo from "../../public/bag2.png";
+import { IoBagHandleOutline } from "react-icons/io5";
 
 const Navbar = () => {
   // --- 2. SPLIT THE HOOKS ---
@@ -37,7 +38,8 @@ const Navbar = () => {
           to="/" 
           className="flex items-center gap-2 text-2xl font-bold text-white"
         >
-          <img src={Logo} alt="Projora Logo" className="w-10 h-10" />
+          {/* <img src={Logo} alt="Projora Logo" className="w-10 h-10" /> */}
+          <IoBagHandleOutline />
           <span>Projora</span>
         </Link>
 
@@ -81,7 +83,9 @@ const Navbar = () => {
           to="/" 
           className="flex items-center gap-2 text-2xl font-bold text-white"
         >
-          <img src={Logo} alt="Projora Logo" className="w-10 h-10" />
+          {/* <img src={Logo} alt="Projora Logo" className="w-10 h-10" /> */}
+
+            <IoBagHandleOutline />
           <span>Projora</span>
         </Link>
         
