@@ -79,7 +79,7 @@ function Ai() {
       <img
         src={ai}
         alt="AI Assistant"
-        className={`w-[100px] cursor-pointer ${
+        className={`w-[80px] md:w-[100px] cursor-pointer ${
           activeAi
             ? "translate-x-[10%] translate-y-[-10%] scale-125 "
             : "translate-x-[0] translate-y-[0] scale-100"
