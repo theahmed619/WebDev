@@ -84,7 +84,7 @@ const Hero = () => {
   const IconComponent = currentSlide.icon;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10 ">
       <div className="relative h-[250px] md:h-[400px] lg:h-[450px] w-full rounded-3xl overflow-hidden group shadow-2xl">
         {/* Animated border glow */}
         <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 opacity-20 blur-xl group-hover:opacity-30 transition-opacity duration-500 -z-10"></div>
@@ -159,10 +159,10 @@ const Hero = () => {
                 </p>
 
                 {/* CTA Buttons */}
-                <div className="flex flex-wrap items-center gap-3 ">
+                <div className="flex items-center gap-3  mb-3">
                   <motion.button
                     onClick={() => navigate('/projects')}
-                    className="group relative inline-flex items-center gap-2 bg-white text-gray-900 font-semibold px-5 md:px-6 py-2.5 md:py-3 rounded-xl shadow-lg hover:shadow-xl transition-all overflow-hidden"
+                    className="group relative inline-flex items-center gap-2 bg-white text-gray-900 font-semibold px-4 md:px-6 py-1  md:py-3 rounded-xl shadow-lg hover:shadow-xl transition-all overflow-hidden"
                     whileHover={{ scale: 1.05, y: -2 }}
                     whileTap={{ scale: 0.98 }}
                   >
@@ -173,7 +173,7 @@ const Hero = () => {
 
                   <motion.button
                     onClick={() => navigate('/search')}
-                    className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border-2 border-white/30 text-white font-semibold px-5 md:px-6 py-2.5 md:py-3 rounded-xl hover:bg-white/20 hover:border-white/50 transition-all "
+                    className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border-2 border-white/30 text-white font-semibold px-4 md:px-6 py-1 md:py-3 rounded-xl hover:bg-white/20 hover:border-white/50 transition-all "
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.98 }}
                   >
