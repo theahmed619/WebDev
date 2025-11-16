@@ -109,8 +109,8 @@ const ProjectCard = ({ project }) => {
             className="group/btn relative flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-2.5 px-4 rounded-lg transition-all duration-300 overflow-hidden shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40"
           >
             <span className="absolute inset-0 bg-gradient-to-r from-blue-400 to-blue-500 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></span>
-            <Eye className="w-4 h-4 relative z-10" />
-            <span className="relative z-10">View Details</span>
+            <ExternalLink className="w-4 h-4 group-hover/demo:rotate-45 transition-transform duration-300" />
+            <span className="relative z-10"> Details</span>
           </Link>
           
           <a
@@ -120,8 +120,9 @@ const ProjectCard = ({ project }) => {
             className="group/demo relative flex-1 flex items-center justify-center gap-2 bg-gray-700/50 backdrop-blur-sm hover:bg-gray-600/70 border border-gray-600 hover:border-gray-500 text-white font-semibold py-2.5 px-4 rounded-lg transition-all duration-300"
             title="View Live Demo"
           >
-            <ExternalLink className="w-4 h-4 group-hover/demo:rotate-45 transition-transform duration-300" />
-            <span className="hidden sm:inline">Demo</span>
+        
+              <Eye className="w-4 h-4 relative z-10" />
+            <span className=" ">Demo</span>
           </a>
         </div>
       </div>

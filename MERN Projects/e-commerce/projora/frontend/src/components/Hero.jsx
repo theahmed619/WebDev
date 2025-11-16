@@ -84,7 +84,7 @@ const Hero = () => {
   const IconComponent = currentSlide.icon;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10">
       <div className="relative h-[250px] md:h-[400px] lg:h-[450px] w-full rounded-3xl overflow-hidden group shadow-2xl">
         {/* Animated border glow */}
         <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 opacity-20 blur-xl group-hover:opacity-30 transition-opacity duration-500 -z-10"></div>
@@ -138,7 +138,7 @@ const Hero = () => {
           </div>
 
           {/* Bottom Section - Content */}
-          <div className="space-y-4">
+          <div className="space-y-4 ">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentIndex}
@@ -159,7 +159,7 @@ const Hero = () => {
                 </p>
 
                 {/* CTA Buttons */}
-                <div className="flex flex-wrap items-center gap-3 pt-1">
+                <div className="flex flex-wrap items-center gap-3 ">
                   <motion.button
                     onClick={() => navigate('/projects')}
                     className="group relative inline-flex items-center gap-2 bg-white text-gray-900 font-semibold px-5 md:px-6 py-2.5 md:py-3 rounded-xl shadow-lg hover:shadow-xl transition-all overflow-hidden"
@@ -173,7 +173,7 @@ const Hero = () => {
 
                   <motion.button
                     onClick={() => navigate('/search')}
-                    className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border-2 border-white/30 text-white font-semibold px-5 md:px-6 py-2.5 md:py-3 rounded-xl hover:bg-white/20 hover:border-white/50 transition-all"
+                    className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border-2 border-white/30 text-white font-semibold px-5 md:px-6 py-2.5 md:py-3 rounded-xl hover:bg-white/20 hover:border-white/50 transition-all "
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.98 }}
                   >
@@ -189,7 +189,7 @@ const Hero = () => {
         {/* Navigation Arrows */}
         <motion.button
           onClick={prevSlide}
-          className="absolute top-1/2 left-4 md:left-6 -translate-y-1/2 bg-white/10 backdrop-blur-md border border-white/20 p-3 rounded-full text-white hover:bg-white/20 transition-all z-20 opacity-0 group-hover:opacity-100"
+          className="absolute top-1/2 left-4 md:left-6 -translate-y-1/2 bg-white/10 backdrop-blur-md border border-white/20 p-3 rounded-full text-white hover:bg-white/20 transition-all z-20 opacity-0 group-hover:opacity-100 "
           whileHover={{ scale: 1.1, x: -4 }}
           whileTap={{ scale: 0.9 }}
         >
@@ -251,27 +251,27 @@ const Hero = () => {
       </div>
 
       {/* Trust Indicators */}
-      <motion.div
+      {/* <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5, duration: 0.6 }}
         className="flex flex-wrap items-center justify-center gap-8 mt-8 text-gray-400 text-sm"
       >
-        <div className="flex items-center gap-2">
+        * <div className="flex items-center gap-2">
           <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
           <span>50+ Premium Projects</span>
-        </div>
-        <div className="w-px h-4 bg-gray-700"></div>
-        <div className="flex items-center gap-2">
+        </div> 
+        <div className="w-px h-4 bg-gray-700"></div> 
+         <div className="flex items-center gap-2">
           <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
           <span>Instant Download</span>
-        </div>
-        {/* <div className="w-px h-4 bg-gray-700"></div>
+        </div> 
+         <div className="w-px h-4 bg-gray-700"></div>
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
           <span>Lifetime Updates</span>
-        </div> */}
-      </motion.div>
+        </div> 
+      </motion.div> */}
     </div>
   );
 };
