@@ -159,10 +159,10 @@ const Hero = () => {
                 </p>
 
                 {/* CTA Buttons */}
-                <div className="flex items-center gap-3  mb-3">
+                <div className="flex items-center gap-3  mb-3 pb-2">
                   <motion.button
                     onClick={() => navigate('/projects')}
-                    className="group relative inline-flex items-center gap-2 bg-white text-gray-900 font-semibold px-4 md:px-6 py-1  md:py-3 rounded-xl shadow-lg hover:shadow-xl transition-all overflow-hidden"
+                    className="group relative inline-flex items-center gap-2 bg-white text-gray-900 font-semibold px-4 md:px-6 py-2  md:py-3 rounded-xl shadow-lg hover:shadow-xl transition-all overflow-hidden"
                     whileHover={{ scale: 1.05, y: -2 }}
                     whileTap={{ scale: 0.98 }}
                   >
@@ -173,7 +173,7 @@ const Hero = () => {
 
                   <motion.button
                     onClick={() => navigate('/search')}
-                    className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border-2 border-white/30 text-white font-semibold px-4 md:px-6 py-1 md:py-3 rounded-xl hover:bg-white/20 hover:border-white/50 transition-all "
+                    className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border-2 border-white/30 text-white font-semibold px-4 md:px-6 py-2 md:py-3 rounded-xl hover:bg-white/20 hover:border-white/50 transition-all "
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.98 }}
                   >
